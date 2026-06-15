@@ -19,8 +19,6 @@ export const BurgerConstructor: FC = () => {
     ingredients: ingredients,
   };
 
-  const orderModalData = orderNumber ? { number: orderNumber } : null;
-
   const price = useMemo(
     () =>
       (constructorItems.bun ? constructorItems.bun.price * 2 : 0) +
@@ -58,7 +56,7 @@ export const BurgerConstructor: FC = () => {
       price={price}
       orderRequest={orderRequest}
       constructorItems={constructorItems}
-      orderModalData={orderModalData}
+      orderModalData={null}
       onOrderClick={onOrderClick}
       closeOrderModal={closeOrderModal}
     />
