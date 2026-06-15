@@ -22,7 +22,6 @@ import styles from './app.module.css';
 function App() {
   const dispatch = useDispatch();
   const location = useLocation();
-  const background = location.state?.background;
   const { loading } = useSelector((state) => state.ingredients);
   const { loading: userLoading } = useSelector((state) => state.user);
 
@@ -43,8 +42,7 @@ function App() {
   return (
     <div className={styles.app}>
       <AppHeader />
-      <Routes location={background || location}>
-        
+      <Routes location={location}>
         <Route path='/' element={<ConstructorPage />} />
         <Route path='/feed' element={<Feed />} />
         

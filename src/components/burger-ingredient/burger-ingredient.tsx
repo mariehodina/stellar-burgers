@@ -1,5 +1,5 @@
 import { FC, memo } from 'react';
-import { useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from '../../services/store';
 import { BurgerIngredientUI } from '@ui';
 import { TIngredient } from '@utils-types';
@@ -26,12 +26,18 @@ export const BurgerIngredient: FC<TBurgerIngredientProps> = memo(
     };
 
     return (
-      <BurgerIngredientUI
-        ingredient={ingredient}
-        count={realCount}
-        locationState={{ background: location }}
-        handleAdd={handleAdd}
-      />
+      <Link
+        to={`/ingredients/${ingredient._id}`}
+        state={{ background: location }}
+        style={{ textDecoration: 'none', color: 'inherit' }}
+      >
+        <BurgerIngredientUI
+          ingredient={ingredient}
+          count={realCount}
+          locationState={{ background: location }}
+          handleAdd={handleAdd}
+        />
+      </Link>
     );
   }
 );
