@@ -1,14 +1,15 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { TIngredient, TConstructorIngredient } from '../../utils/types';
+import { TConstructorIngredient, TIngredient } from '@utils-types';
+import { v4 as uuidv4 } from 'uuid';
 
-interface IConstructorState {
-  bun: TConstructorIngredient | null;
+type TConstructorState = {
+  bun: TIngredient | null;
   ingredients: TConstructorIngredient[];
-}
+};
 
-const initialState: IConstructorState = {
+const initialState: TConstructorState = {
   bun: null,
-  ingredients: [],
+  ingredients: []
 };
 
 const constructorSlice = createSlice({
@@ -23,34 +24,33 @@ const constructorSlice = createSlice({
           state.ingredients.push(action.payload);
         }
       },
-      prepare: (ingredient: TIngredient) => {
-        const id = crypto.randomUUID();
-        return { payload: { ...ingredient, id } };
-      },
+      prepare: (ingredient: TIngredient) => ({
+        payload: { ...ingredient, id: uuidv4() }
+      })
     },
-    removeIngredient: (state, action: PayloadAction<string>) => {
-      state.ingredients = state.ingredients.filter(
-        (item) => item.id !== action.payload
-      );
+    removeIngredient: (state, action: PayloadAction<number>) => {
+      state.ingredients.splice(action.payload, 1);
     },
-    moveIngredient: (state, action: PayloadAction<{ from: number; to: number }>) => {
-      const { from, to } = action.payload;
-      const moved = state.ingredients[from];
-      state.ingredients.splice(from, 1);
-      state.ingredients.splice(to, 0, moved);
+    moveIngredient: (
+      state,
+      action: PayloadAction<{ fromIndex: number; toIndex: number }>
+    ) => {
+      const { fromIndex, toIndex } = action.payload;
+      const item = state.ingredients[fromIndex];
+      state.ingredients.splice(fromIndex, 1);
+      state.ingredients.splice(toIndex, 0, item);
     },
     clearConstructor: (state) => {
       state.bun = null;
       state.ingredients = [];
-    },
-  },
+    }
+  }
 });
 
 export const {
   addIngredient,
   removeIngredient,
   moveIngredient,
-  clearConstructor,
+  clearConstructor
 } = constructorSlice.actions;
-
-export default constructorSlice.reducer;
+export const constructorReducer = constructorSlice.reducer;

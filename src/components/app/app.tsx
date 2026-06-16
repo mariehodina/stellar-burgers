@@ -1,3 +1,16 @@
+import {
+  ConstructorPage,
+  Feed,
+  Login,
+  Register,
+  ForgotPassword,
+  ResetPassword,
+  Profile,
+  ProfileOrders,
+  NotFound404
+} from '@pages';
+import styles from './app.module.css';
+
 import { AppHeader, Modal, OrderInfo, IngredientDetails } from '@components';
 import { Preloader } from '@ui';
 import { ProtectedRoute } from '../protected-route';
@@ -14,24 +27,12 @@ import { getIngredients } from '@slices';
 import { getUser, authChecked } from '@slices';
 import { getCookie } from '../../utils/cookie';
 
-import {
-  ConstructorPage,
-  Feed,
-  Login,
-  Register,
-  ForgotPassword,
-  ResetPassword,
-  Profile,
-  ProfileOrders,
-  NotFound404
-} from '@pages';
-import styles from './app.module.css';
-
-function App() {
-  const dispatch = useDispatch();
-    const location = useLocation();
+const App = () => {
+  const location = useLocation();
   const navigate = useNavigate();
   const background = location.state?.background;
+
+  const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(getIngredients());
@@ -63,10 +64,20 @@ function App() {
   return (
     <div className={styles.app}>
       <AppHeader />
-      <Route path='/'element={ isLoading ? (<Preloader />) : error ? (
-              <div className={`${styles.error} text text_type_main-medium pt-4`}>{error}
-              </div>) : (
-                 <ConstructorPage />
+      <Routes location={background || location}>
+        <Route
+          path='/'
+          element={
+            isLoading ? (
+              <Preloader />
+            ) : error ? (
+              <div
+                className={`${styles.error} text text_type_main-medium pt-4`}
+              >
+                {error}
+              </div>
+            ) : (
+              <ConstructorPage />
             )
           }
         />

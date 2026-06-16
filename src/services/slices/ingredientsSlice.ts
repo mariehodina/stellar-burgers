@@ -1,26 +1,23 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { getIngredientsApi } from '../../utils/burger-api';
-import { TIngredient } from '../../utils/types';
+import { TIngredient } from '@utils-types';
+import { getIngredientsApi } from '@api';
 
-interface IIngredientsState {
-  items: TIngredient[];
+export const getIngredients = createAsyncThunk<TIngredient[]>(
+  'ingredients/getIngredients',
+  getIngredientsApi
+);
+
+type TIngredientsState = {
+  ingredients: TIngredient[];
   loading: boolean;
   error: string | null;
-}
-
-const initialState: IIngredientsState = {
-  items: [],
-  loading: false,
-  error: null,
 };
 
-export const fetchIngredients = createAsyncThunk(
-  'ingredients/fetchIngredients',
-  async () => {
-    const data = await getIngredientsApi();
-    return data;
-  }
-);
+const initialState: TIngredientsState = {
+  ingredients: [],
+  loading: false,
+  error: null
+};
 
 const ingredientsSlice = createSlice({
   name: 'ingredients',
@@ -28,19 +25,19 @@ const ingredientsSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(fetchIngredients.pending, (state) => {
+      .addCase(getIngredients.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(fetchIngredients.fulfilled, (state, action) => {
+      .addCase(getIngredients.fulfilled, (state, action) => {
         state.loading = false;
-        state.items = action.payload;
+        state.ingredients = action.payload;
       })
-      .addCase(fetchIngredients.rejected, (state, action) => {
+      .addCase(getIngredients.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.error.message || 'Ошибка загрузки';
+        state.error = action.error.message || 'Ошибка загрузки ингредиентов';
       });
-  },
+  }
 });
 
-export default ingredientsSlice.reducer;
+export const ingredientsReducer = ingredientsSlice.reducer;
