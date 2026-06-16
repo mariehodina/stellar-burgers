@@ -23,8 +23,8 @@ import {
 } from 'react-router-dom';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from '../../services/store';
-import { getIngredients } from '@slices';
-import { getUser, authChecked } from '@slices';
+import { getIngredients } from '../../services/slices/ingredientsSlice';
+import { authChecked } from '../../services/slices/userSlice';
 import { getCookie } from '../../utils/cookie';
 
 const App = () => {
@@ -39,8 +39,6 @@ const App = () => {
 
     const token = getCookie('accessToken');
     if (token) {
-      dispatch(getUser());
-    } else {
       dispatch(authChecked());
     }
   }, [dispatch]);

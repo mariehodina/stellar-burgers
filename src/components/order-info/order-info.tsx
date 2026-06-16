@@ -12,11 +12,11 @@ import {
 export const OrderInfo: FC = () => {
   const { number } = useParams();
   const dispatch = useDispatch();
-  const orderData = useSelector((state) => state.orders.currentOrder);
+  const orderData = useSelector((state) => state.order.currentOrder);
 
   const ingredients = useSelector((state) => state.ingredients.ingredients);
 
-  const loading = useSelector((state) => state.orders.loading);
+  const loading = useSelector((state) => state.order.loading);
 
   useEffect(() => {
     if (number) {

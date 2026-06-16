@@ -4,13 +4,13 @@ import { useNavigate } from 'react-router-dom';
 import { BurgerConstructorUI } from '@ui';
 import { TConstructorIngredient } from '@utils-types';
 import { createOrder, clearOrder } from '../../services/slices/orderSlice';
-import {  removeIngredient, clearConstructor } from '../../services/slices/constructorSlice';
+import { removeIngredient, clearConstructor } from '../../services/slices/constructorSlice';
 
 export const BurgerConstructor: FC = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   
-   const constructorItems: {
+  const constructorItems: {
     bun: TConstructorIngredient | null;
     ingredients: TConstructorIngredient[];
   } = useSelector((state) => ({
@@ -19,9 +19,7 @@ export const BurgerConstructor: FC = () => {
   }));
 
   const orderRequest = useSelector((state) => state.order.orderRequest);
-
   const orderModalData = useSelector((state) => state.order.orderModalData);
-
   const user = useSelector((state) => state.user.user);
 
   const onOrderClick = () => {

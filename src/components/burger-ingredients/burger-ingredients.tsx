@@ -1,4 +1,4 @@
-import { FC, useState, useRef } from 'react';
+import { FC, useState, useRef, useEffect } from 'react';
 import { useSelector } from '../../services/store';
 import { BurgerIngredientsUI } from '@ui';
 import { useInView } from 'react-intersection-observer';
