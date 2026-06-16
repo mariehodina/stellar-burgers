@@ -4,19 +4,52 @@ import { useNavigate } from 'react-router-dom';
 import { BurgerConstructorUI } from '@ui';
 import { TConstructorIngredient } from '@utils-types';
 import { createOrder, clearOrder } from '../../services/slices/orderSlice';
-import { clearConstructor } from '../../services/slices/constructorSlice';
+import {  removeIngredient, clearConstructor } from '../../services/slices/constructorSlice';
 
 export const BurgerConstructor: FC = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   
-  const { bun, ingredients } = useSelector((state) => state.burgerConstructor);
-  const { orderRequest, orderNumber } = useSelector((state) => state.order);
-  const { isAuth } = useSelector((state) => state.user);
+   const constructorItems: {
+    bun: TConstructorIngredient | null;
+    ingredients: TConstructorIngredient[];
+  } = useSelector((state) => ({
+    bun: state.burgerConstructor?.bun as TConstructorIngredient | null,
+    ingredients: state.burgerConstructor?.ingredients || []
+  }));
 
-  const constructorItems = {
-    bun: bun,
-    ingredients: ingredients,
+  const orderRequest = useSelector((state) => state.order.orderRequest);
+
+  const orderModalData = useSelector((state) => state.order.orderModalData);
+
+  const user = useSelector((state) => state.user.user);
+
+  const onOrderClick = () => {
+    if (!constructorItems.bun || orderRequest) return;
+
+    if (!user) {
+      navigate('/login');
+      return;
+    }
+
+    const ingredients = [
+      constructorItems.bun._id,
+      ...constructorItems.ingredients.map((i: TConstructorIngredient) => i._id),
+      constructorItems.bun._id
+    ];
+    dispatch(createOrder(ingredients))
+      .unwrap()
+      .then(() => {
+        dispatch(clearConstructor());
+      });
+  };
+
+  const closeOrderModal = () => {
+    dispatch(clearOrder());
+  };
+
+  const onDeleteIngredient = (index: number) => {
+    dispatch(removeIngredient(index));
   };
 
   const price = useMemo(
@@ -29,36 +62,15 @@ export const BurgerConstructor: FC = () => {
     [constructorItems]
   );
 
-  const onOrderClick = () => {
-    if (!constructorItems.bun || orderRequest) return;
-    
-    if (!isAuth) {
-      navigate('/login');
-      return;
-    }
-
-    const ingredientsIds = [
-      constructorItems.bun._id,
-      ...constructorItems.ingredients.map((item) => item._id),
-      constructorItems.bun._id,
-    ];
-    
-    dispatch(createOrder(ingredientsIds));
-  };
-
-  const closeOrderModal = () => {
-    dispatch(clearOrder());
-    dispatch(clearConstructor());
-  };
-
   return (
     <BurgerConstructorUI
       price={price}
       orderRequest={orderRequest}
       constructorItems={constructorItems}
-      orderModalData={null}
+      orderModalData={orderModalData}
       onOrderClick={onOrderClick}
       closeOrderModal={closeOrderModal}
+      deleteIngredient={onDeleteIngredient}
     />
   );
 };
