@@ -23,37 +23,37 @@ import {
 } from 'react-router-dom';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from '../../services/store';
-import { getIngredients } from '../../services/slices/ingredientsSlice';
-import { checkAuth } from '../../services/slices/userSlice';
+import { fetchIngredients } from '../../services/slices/ingredientsSlice';
+import { fetchUser } from '../../services/slices/userSlice';
 import { getCookie } from '../../utils/cookie';
 
 const App = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const background = location.state?.background;
+  const modalBackground = location.state?.background;
 
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getIngredients());
+    dispatch(fetchIngredients());
 
-    const token = getCookie('accessToken');
-    if (token) {
-      dispatch(checkAuth());
+    const accessToken = getCookie('accessToken');
+    if (accessToken) {
+      dispatch(fetchUser());
     }
   }, [dispatch]);
 
-  const isLoading = useSelector((state) => state.ingredients.loading);
-  const error = useSelector((state) => state.ingredients.error);
+  const isLoading = useSelector((state) => state.ingredients.isLoading);
+  const errorMessage = useSelector((state) => state.ingredients.error);
 
   const handleModalClose = () => {
     navigate(-1);
   };
 
   const OrderModal = () => {
-    const { number } = useParams();
+    const { number: orderNumber } = useParams();
     return (
-      <Modal onClose={handleModalClose} title={`#${number}`}>
+      <Modal onClose={handleModalClose} title={`#${orderNumber}`}>
         <OrderInfo />
       </Modal>
     );
@@ -62,17 +62,17 @@ const App = () => {
   return (
     <div className={styles.app}>
       <AppHeader />
-      <Routes location={background || location}>
+      <Routes location={modalBackground || location}>
         <Route
           path='/'
           element={
             isLoading ? (
               <Preloader />
-            ) : error ? (
+            ) : errorMessage ? (
               <div
                 className={`${styles.error} text text_type_main-medium pt-4`}
               >
-                {error}
+                {errorMessage}
               </div>
             ) : (
               <ConstructorPage />
@@ -160,7 +160,7 @@ const App = () => {
         <Route path='*' element={<NotFound404 />} />
       </Routes>
 
-      {background && (
+      {modalBackground && (
         <Routes>
           <Route path='/feed/:number' element={<OrderModal />} />
           <Route

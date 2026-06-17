@@ -28,10 +28,10 @@ const constructorSlice = createSlice({
         payload: { ...ingredient, id: uuidv4() }
       })
     },
-    removeIngredient: (state, action: PayloadAction<number>) => {
+    deleteIngredient: (state, action: PayloadAction<number>) => {
       state.ingredients.splice(action.payload, 1);
     },
-    moveIngredient: (
+    reorderIngredient: (
       state,
       action: PayloadAction<{ fromIndex: number; toIndex: number }>
     ) => {
@@ -40,7 +40,7 @@ const constructorSlice = createSlice({
       state.ingredients.splice(fromIndex, 1);
       state.ingredients.splice(toIndex, 0, item);
     },
-    clearConstructor: (state) => {
+    resetConstructor: (state) => {
       state.bun = null;
       state.ingredients = [];
     }
@@ -49,8 +49,8 @@ const constructorSlice = createSlice({
 
 export const {
   addIngredient,
-  removeIngredient,
-  moveIngredient,
-  clearConstructor
+  deleteIngredient,
+  reorderIngredient,
+  resetConstructor
 } = constructorSlice.actions;
 export const constructorReducer = constructorSlice.reducer;

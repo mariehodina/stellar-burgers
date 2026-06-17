@@ -13,24 +13,24 @@ import { addIngredient } from '../../services/slices/constructorSlice';
 export const BurgerIngredient: FC<TBurgerIngredientProps> = memo(
   ({ ingredient, count }) => {
     const dispatch = useDispatch();
-    const location = useLocation();
+    const currentLocation = useLocation();
     
     const { bun, ingredients } = useSelector((state) => state.burgerConstructor);
     
-    const realCount = ingredient.type === 'bun' 
+    const actualCount = ingredient.type === 'bun' 
       ? bun?._id === ingredient._id ? 2 : 0
-      : ingredients.filter((i) => i._id === ingredient._id).length;
+      : ingredients.filter((item) => item._id === ingredient._id).length;
 
-    const handleAdd = () => {
+    const handleAddIngredient = () => {
       dispatch(addIngredient(ingredient));
     };
 
     return (
         <BurgerIngredientUI
           ingredient={ingredient}
-          count={realCount}
-          locationState={{ background: location }}
-          handleAdd={handleAdd}
+          count={actualCount}
+          locationState={{ background: currentLocation }}
+          handleAdd={handleAddIngredient}
         />
     );
   }

@@ -2,7 +2,6 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { TOrder } from '@utils-types';
 import { orderBurgerApi, getOrderByNumberApi } from '@api';
 
-// Создание заказа
 export const createOrder = createAsyncThunk(
   'order/createOrder',
   async (ingredients: string[]) => {
@@ -11,9 +10,8 @@ export const createOrder = createAsyncThunk(
   }
 );
 
-// Получение заказа по номеру
-export const getOrderByNumber = createAsyncThunk(
-  'order/getOrderByNumber',
+export const fetchOrderByNumber = createAsyncThunk(
+  'order/fetchOrderByNumber',
   async (number: number) => {
     const response = await getOrderByNumberApi(number);
     return response.orders[0];
@@ -21,18 +19,18 @@ export const getOrderByNumber = createAsyncThunk(
 );
 
 type TOrderState = {
-  orderRequest: boolean;
-  orderModalData: { number: number } | null;  // ← изменено
+  isOrderRequesting: boolean;
+  orderDetails: { number: number } | null;
   currentOrder: TOrder | null;
-  loading: boolean;
+  isLoading: boolean;
   error: string | null;
 };
 
 const initialState: TOrderState = {
-  orderRequest: false,
-  orderModalData: null,
+  isOrderRequesting: false,
+  orderDetails: null,
   currentOrder: null,
-  loading: false,
+  isLoading: false,
   error: null
 };
 
@@ -41,7 +39,7 @@ const orderSlice = createSlice({
   initialState,
   reducers: {
     clearOrder: (state) => {
-      state.orderModalData = null;
+      state.orderDetails = null;
     },
     clearCurrentOrder: (state) => {
       state.currentOrder = null;
@@ -49,30 +47,28 @@ const orderSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      // createOrder
       .addCase(createOrder.pending, (state) => {
-        state.orderRequest = true;
+        state.isOrderRequesting = true;
         state.error = null;
       })
       .addCase(createOrder.fulfilled, (state, action) => {
-        state.orderRequest = false;
-        state.orderModalData = { number: action.payload.number };  // ← изменено
+        state.isOrderRequesting = false;
+        state.orderDetails = { number: action.payload.number };
       })
       .addCase(createOrder.rejected, (state, action) => {
-        state.orderRequest = false;
+        state.isOrderRequesting = false;
         state.error = action.error.message || 'Ошибка оформления заказа';
       })
-      // getOrderByNumber
-      .addCase(getOrderByNumber.pending, (state) => {
-        state.loading = true;
+      .addCase(fetchOrderByNumber.pending, (state) => {
+        state.isLoading = true;
         state.error = null;
       })
-      .addCase(getOrderByNumber.fulfilled, (state, action) => {
-        state.loading = false;
+      .addCase(fetchOrderByNumber.fulfilled, (state, action) => {
+        state.isLoading = false;
         state.currentOrder = action.payload;
       })
-      .addCase(getOrderByNumber.rejected, (state, action) => {
-        state.loading = false;
+      .addCase(fetchOrderByNumber.rejected, (state, action) => {
+        state.isLoading = false;
         state.error = action.error.message || 'Ошибка получения заказа';
       });
   }

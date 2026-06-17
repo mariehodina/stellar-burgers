@@ -10,54 +10,58 @@ export const BurgerIngredients: FC = () => {
   const mains = ingredients.filter((item) => item.type === 'main');
   const sauces = ingredients.filter((item) => item.type === 'sauce');
 
-  const [currentTab, setCurrentTab] = useState<TTabMode>('bun');
-  const titleBunRef = useRef<HTMLHeadingElement>(null);
-  const titleMainRef = useRef<HTMLHeadingElement>(null);
-  const titleSaucesRef = useRef<HTMLHeadingElement>(null);
+  const [activeTab, setActiveTab] = useState<TTabMode>('bun');
+  const bunTitleRef = useRef<HTMLHeadingElement>(null);
+  const titleRef = useRef<HTMLHeadingElement>(null);
+  const sauceTitleRef = useRef<HTMLHeadingElement>(null);
 
-  const [bunsRef, inViewBuns] = useInView({
+  const [bunSectionRef, isBunVisible] = useInView({
     threshold: 0
   });
 
-  const [mainsRef, inViewFilling] = useInView({
+  const [mainSectionRef, isMainVisible] = useInView({
     threshold: 0
   });
 
-  const [saucesRef, inViewSauces] = useInView({
+  const [sauceSectionRef, isSauceVisible] = useInView({
     threshold: 0
   });
 
-  useEffect(() => {
-    if (inViewBuns) {
-      setCurrentTab('bun');
-    } else if (inViewSauces) {
-      setCurrentTab('sauce');
-    } else if (inViewFilling) {
-      setCurrentTab('main');
-    }
-  }, [inViewBuns, inViewFilling, inViewSauces]);
+useEffect(() => {
+  const tabMap = {
+    bun: isBunVisible,
+    sauce: isSauceVisible,
+    main: isMainVisible
+  };
+  
+  const activeTab = Object.entries(tabMap).find(([, isVisible]) => isVisible)?.[0];
+  
+  if (activeTab) {
+    setActiveTab(activeTab as TTabMode);
+  }
+}, [isBunVisible, isMainVisible, isSauceVisible]);
 
   const onTabClick = (tab: string) => {
-    setCurrentTab(tab as TTabMode);
+    setActiveTab(tab as TTabMode);
     if (tab === 'bun')
-      titleBunRef.current?.scrollIntoView({ behavior: 'smooth' });
+      bunTitleRef.current?.scrollIntoView({ behavior: 'smooth' });
     if (tab === 'main')
-      titleMainRef.current?.scrollIntoView({ behavior: 'smooth' });
+      titleRef.current?.scrollIntoView({ behavior: 'smooth' });
     if (tab === 'sauce')
-      titleSaucesRef.current?.scrollIntoView({ behavior: 'smooth' });
+      sauceTitleRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
   return (
     <BurgerIngredientsUI
-      currentTab={currentTab}
+      currentTab={activeTab}
       buns={buns}
       mains={mains}
       sauces={sauces}
-      titleBunRef={titleBunRef}
-      titleMainRef={titleMainRef}
-      titleSaucesRef={titleSaucesRef}
-      bunsRef={bunsRef}
-      mainsRef={mainsRef}
-      saucesRef={saucesRef}
+      titleBunRef={bunTitleRef}
+      titleMainRef={titleRef}
+      titleSaucesRef={sauceTitleRef}
+      bunsRef={bunSectionRef}
+      mainsRef={mainSectionRef}
+      saucesRef={sauceSectionRef}
       onTabClick={onTabClick}
     />
   );

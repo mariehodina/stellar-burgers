@@ -4,15 +4,15 @@ import { setCookie, deleteCookie } from '../../utils/cookie';
 
 type TUserState = {
   user: { email: string; name: string } | null;
-  isAuth: boolean;
-  loading: boolean;
+  isAuthenticated: boolean;
+  isLoading: boolean;
   error: string | null;
 };
 
 const initialState: TUserState = {
   user: null,
-  isAuth: false,
-  loading: false,
+  isAuthenticated: false,
+  isLoading: false,
   error: null,
 };
 
@@ -26,7 +26,6 @@ export const loginUser = createAsyncThunk(
   }
 );
 
-// Регистрация
 export const registerUser = createAsyncThunk(
   'user/register',
   async (data: { email: string; password: string; name: string }) => {
@@ -37,12 +36,12 @@ export const registerUser = createAsyncThunk(
   }
 );
 
-export const checkAuth = createAsyncThunk('user/checkAuth', async () => {
+export const fetchUser = createAsyncThunk('user/fetchUser', async () => {
   const response = await getUserApi();
   return response.user;
 });
 
-export const updateUser = createAsyncThunk(
+export const updateUserData = createAsyncThunk(
   'user/update',
   async (data: { name?: string; email?: string; password?: string }) => {
     const response = await updateUserApi(data);
@@ -62,55 +61,51 @@ const userSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      // loginUser
       .addCase(loginUser.pending, (state) => {
-        state.loading = true;
+        state.isLoading = true;
         state.error = null;
       })
       .addCase(loginUser.fulfilled, (state, action) => {
-        state.loading = false;
+        state.isLoading = false;
         state.user = action.payload;
-        state.isAuth = true;
+        state.isAuthenticated = true;
       })
       .addCase(loginUser.rejected, (state, action) => {
-        state.loading = false;
+        state.isLoading = false;
         state.error = action.error.message || 'Ошибка входа';
       })
       .addCase(registerUser.pending, (state) => {
-        state.loading = true;
+        state.isLoading = true;
         state.error = null;
       })
       .addCase(registerUser.fulfilled, (state, action) => {
-        state.loading = false;
+        state.isLoading = false;
         state.user = action.payload;
-        state.isAuth = true;
+        state.isAuthenticated = true;
       })
       .addCase(registerUser.rejected, (state, action) => {
-        state.loading = false;
+        state.isLoading = false;
         state.error = action.error.message || 'Ошибка регистрации';
       })
-      // checkAuth
-      .addCase(checkAuth.pending, (state) => {
-        state.loading = true;
+      .addCase(fetchUser.pending, (state) => {
+        state.isLoading = true;
       })
-      .addCase(checkAuth.fulfilled, (state, action) => {
-        state.loading = false;
+      .addCase(fetchUser.fulfilled, (state, action) => {
+        state.isLoading = false;
         state.user = action.payload;
-        state.isAuth = true;
+        state.isAuthenticated = true;
       })
-      .addCase(checkAuth.rejected, (state) => {
-        state.loading = false;
+      .addCase(fetchUser.rejected, (state) => {
+        state.isLoading = false;
         state.user = null;
-        state.isAuth = false;
+        state.isAuthenticated = false;
       })
-    
-      .addCase(updateUser.fulfilled, (state, action) => {
+      .addCase(updateUserData.fulfilled, (state, action) => {
         state.user = action.payload;
       })
-     
       .addCase(logoutUser.fulfilled, (state) => {
         state.user = null;
-        state.isAuth = false;
+        state.isAuthenticated = false;
       });
   }
 });

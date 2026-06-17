@@ -5,13 +5,15 @@ import { useSelector } from '../../services/store';
 import { useParams } from 'react-router-dom';
 
 export const IngredientDetails: FC = () => {
-  const { id } = useParams();
+  const { id: ingredientId } = useParams(); 
   const ingredients = useSelector((state) => state.ingredients.ingredients);
-  const ingredientData = ingredients.find((item) => item._id === id);
+  const selectedIngredient = ingredients.find( 
+    (ingredient) => ingredient._id === ingredientId 
+  );
 
-  if (!ingredientData) {
+  if (!selectedIngredient) { 
     return <Preloader />;
   }
 
-  return <IngredientDetailsUI ingredientData={ingredientData} />;
+  return <IngredientDetailsUI ingredientData={selectedIngredient} />; 
 };
