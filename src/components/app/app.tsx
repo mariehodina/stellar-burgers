@@ -24,7 +24,7 @@ import {
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from '../../services/store';
 import { getIngredients } from '../../services/slices/ingredientsSlice';
-import { authChecked } from '../../services/slices/userSlice';
+import { checkAuth } from '../../services/slices/userSlice';
 import { getCookie } from '../../utils/cookie';
 
 const App = () => {
@@ -39,7 +39,7 @@ const App = () => {
 
     const token = getCookie('accessToken');
     if (token) {
-      dispatch(authChecked());
+      dispatch(checkAuth());
     }
   }, [dispatch]);
 

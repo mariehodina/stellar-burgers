@@ -9,7 +9,9 @@ export const BurgerConstructorElement: FC<BurgerConstructorElementProps> = memo(
     const handleMoveUp = () => {};
 
     const handleClose = () => {
-      deleteIngredient(index);
+      if (deleteIngredient) {
+        deleteIngredient(index);
+      }
     };
 
     return (

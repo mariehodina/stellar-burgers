@@ -16,7 +16,6 @@ const initialState: TUserState = {
   error: null,
 };
 
-// Логин
 export const loginUser = createAsyncThunk(
   'user/login',
   async (data: { email: string; password: string }) => {
@@ -38,13 +37,11 @@ export const registerUser = createAsyncThunk(
   }
 );
 
-// Проверка авторизации
 export const checkAuth = createAsyncThunk('user/checkAuth', async () => {
   const response = await getUserApi();
   return response.user;
 });
 
-// Обновление пользователя
 export const updateUser = createAsyncThunk(
   'user/update',
   async (data: { name?: string; email?: string; password?: string }) => {
@@ -53,7 +50,6 @@ export const updateUser = createAsyncThunk(
   }
 );
 
-// Выход
 export const logoutUser = createAsyncThunk('user/logout', async () => {
   await logoutApi();
   deleteCookie('accessToken');
@@ -80,7 +76,6 @@ const userSlice = createSlice({
         state.loading = false;
         state.error = action.error.message || 'Ошибка входа';
       })
-      // registerUser
       .addCase(registerUser.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -108,11 +103,11 @@ const userSlice = createSlice({
         state.user = null;
         state.isAuth = false;
       })
-      // updateUser
+    
       .addCase(updateUser.fulfilled, (state, action) => {
         state.user = action.payload;
       })
-      // logoutUser
+     
       .addCase(logoutUser.fulfilled, (state) => {
         state.user = null;
         state.isAuth = false;
