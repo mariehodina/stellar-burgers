@@ -9,44 +9,41 @@ import { deleteIngredient, resetConstructor } from '../../services/slices/constr
 export const BurgerConstructor: FC = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  
-  const constructorItems: {
-    bun: TConstructorIngredient | null;
-    ingredients: TConstructorIngredient[];
-  } = useSelector((state) => ({
-    bun: state.burgerConstructor?.bun as TConstructorIngredient | null,
-    ingredients: state.burgerConstructor?.ingredients || []
-  }));
+  const bun = useSelector((state) => state.burgerConstructor?.bun as TConstructorIngredient | null);
+  const ingredients = useSelector((state) => state.burgerConstructor?.ingredients || []);
+  const orderRequest = useSelector((state) => state.order.isOrderRequesting);
+  const orderModalData = useSelector((state) => state.order.orderDetails);
+  const user = useSelector((state) => state.user.user);
+  const constructorItems = {
+    bun: bun,
+    ingredients: ingredients,
+  };
 
-  const isOrderRequesting = useSelector((state) => state.order.orderRequest);
-  const orderDetails = useSelector((state) => state.order.orderModalData);
-  const currentUser = useSelector((state) => state.user.user);
+  const onOrderClick = () => {
+    if (!constructorItems.bun || orderRequest) return;
 
-  const handleOrderClick = () => {
-    if (!constructorItems.bun || isOrderRequesting) return;
-
-    if (!currentUser) {
+    if (!user) {
       navigate('/login');
       return;
     }
 
-    const ingredientIds = [
+    const ingredientsIds = [
       constructorItems.bun._id,
       ...constructorItems.ingredients.map((i: TConstructorIngredient) => i._id),
       constructorItems.bun._id
     ];
-    dispatch(createOrder(ingredientIds))
+    dispatch(createOrder(ingredientsIds))
       .unwrap()
       .then(() => {
         dispatch(resetConstructor());
       });
   };
 
-  const handleCloseOrderModal = () => {
+  const closeOrderModal = () => {
     dispatch(clearOrder());
   };
 
-  const handleDeleteIngredient = (index: number) => {
+  const onDeleteIngredient = (index: number) => {
     dispatch(deleteIngredient(index));
   };
 
@@ -63,12 +60,12 @@ export const BurgerConstructor: FC = () => {
   return (
     <BurgerConstructorUI
       price={price}
-      orderRequest={isOrderRequesting}
+      orderRequest={orderRequest}
       constructorItems={constructorItems}
-      orderModalData={orderDetails}
-      onOrderClick={handleOrderClick}
-      closeOrderModal={handleCloseOrderModal}
-      deleteIngredient={handleDeleteIngredient}
+      orderModalData={orderModalData}
+      onOrderClick={onOrderClick}
+      closeOrderModal={closeOrderModal}
+      deleteIngredient={onDeleteIngredient}
     />
   );
 };

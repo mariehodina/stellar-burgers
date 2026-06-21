@@ -36,7 +36,6 @@ const App = () => {
 
   useEffect(() => {
     dispatch(fetchIngredients());
-
     const accessToken = getCookie('accessToken');
     if (accessToken) {
       dispatch(fetchUser());
@@ -147,6 +146,7 @@ const App = () => {
             </div>
           }
         />
+
         <Route
           path='/profile/orders/:number'
           element={

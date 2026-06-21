@@ -7,19 +7,19 @@ interface IProtectedRouteProps {
 }
 
 export const ProtectedRoute = ({ children, onlyUnAuth = false }: IProtectedRouteProps) => {
-  const { isAuth, loading } = useSelector((state) => state.user);
+  const { isAuthenticated, isLoading } = useSelector((state) => state.user);
   const location = useLocation();
 
-  if (loading) {
+  if (isLoading) {
     return null;
   }
 
-  if (onlyUnAuth && isAuth) {
+  if (onlyUnAuth && isAuthenticated) {
     const from = location.state?.from || '/';
     return <Navigate to={from} replace />;
   }
 
-  if (!onlyUnAuth && !isAuth) {
+  if (!onlyUnAuth && !isAuthenticated) {
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
