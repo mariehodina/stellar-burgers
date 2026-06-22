@@ -6,15 +6,14 @@ import { fetchFeeds } from '../../services/slices/feedSlice';
 
 export const Feed: FC = () => {
   const dispatch = useDispatch();
-  const { orders, isLoading } = useSelector((state) => state.feed);
+  const orders = useSelector((state) => state.feed.orders);
 
   useEffect(() => {
     dispatch(fetchFeeds());
   }, [dispatch]);
 
-  if (isLoading || !orders.length) {
+  if (!orders.length) {
     return <Preloader />;
   }
-
   return <FeedUI orders={orders} handleGetFeeds={() => dispatch(fetchFeeds())} />;
 };

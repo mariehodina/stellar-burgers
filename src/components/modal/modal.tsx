@@ -4,20 +4,17 @@ import ReactDOM from 'react-dom';
 import { TModalProps } from './type';
 import { ModalUI } from '@ui';
 
-const MODAL_ROOT_ID = 'modals'; 
-const modalContainer = document.getElementById(MODAL_ROOT_ID); 
+const modalRoot = document.getElementById('modals');
 
 export const Modal: FC<TModalProps> = memo(({ title, onClose, children }) => {
   useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => { 
-      if (event.key === 'Escape') { 
-        onClose();
-      }
+    const handleEsc = (e: KeyboardEvent) => {
+      e.key === 'Escape' && onClose();
     };
 
-    document.addEventListener('keydown', handleKeyDown);
+    document.addEventListener('keydown', handleEsc);
     return () => {
-      document.removeEventListener('keydown', handleKeyDown); 
+      document.removeEventListener('keydown', handleEsc);
     };
   }, [onClose]);
 
@@ -25,6 +22,6 @@ export const Modal: FC<TModalProps> = memo(({ title, onClose, children }) => {
     <ModalUI title={title} onClose={onClose}>
       {children}
     </ModalUI>,
-    modalContainer as HTMLDivElement 
+    modalRoot as HTMLDivElement
   );
 });

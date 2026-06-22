@@ -24,7 +24,7 @@ import {
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from '../../services/store';
 import { fetchIngredients } from '../../services/slices/ingredientsSlice';
-import { fetchUser } from '../../services/slices/userSlice';
+import { getUser } from '../../services/slices/userSlice';
 import { getCookie } from '../../utils/cookie';
 
 const App = () => {
@@ -35,12 +35,12 @@ const App = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(fetchIngredients());
-    const accessToken = getCookie('accessToken');
-    if (accessToken) {
-      dispatch(fetchUser());
-    }
-  }, [dispatch]);
+  dispatch(fetchIngredients());
+  const accessToken = getCookie('accessToken');
+  if (accessToken) {
+    dispatch(getUser());
+  }
+}, [dispatch]);
 
   const isLoading = useSelector((state) => state.ingredients.isLoading);
   const errorMessage = useSelector((state) => state.ingredients.error);
@@ -146,7 +146,6 @@ const App = () => {
             </div>
           }
         />
-
         <Route
           path='/profile/orders/:number'
           element={

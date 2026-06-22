@@ -4,23 +4,20 @@ import { useDispatch, useSelector } from '../../services/store';
 import { updateUserData } from '../../services/slices/userSlice';
 
 export const Profile: FC = () => {
-  const { user } = useSelector((state) => state.user);
-  const dispatch = useDispatch();
+  const user = useSelector((state) => state.user.user);
 
   const [formValue, setFormValue] = useState({
-    name: user?.name || '',
-    email: user?.email || '',
+    name: '',
+    email: '',
     password: ''
   });
 
   useEffect(() => {
-    if (user) {
-      setFormValue({
-        name: user.name || '',
-        email: user.email || '',
-        password: ''
-      });
-    }
+    setFormValue((prevState) => ({
+      ...prevState,
+      name: user?.name || '',
+      email: user?.email || ''
+    }));
   }, [user]);
 
   const isFormChanged =
@@ -28,14 +25,11 @@ export const Profile: FC = () => {
     formValue.email !== user?.email ||
     !!formValue.password;
 
+  const dispatch = useDispatch();
+
   const handleSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
-    const updateData: { name?: string; email?: string; password?: string } = {};
-    if (formValue.name !== user?.name) updateData.name = formValue.name;
-    if (formValue.email !== user?.email) updateData.email = formValue.email;
-    if (formValue.password) updateData.password = formValue.password;
-    
-    dispatch(updateUserData(updateData))
+    dispatch(updateUserData(formValue))
       .unwrap()
       .then(() => {
         setFormValue((prev) => ({

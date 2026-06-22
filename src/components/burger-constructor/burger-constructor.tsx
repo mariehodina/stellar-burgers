@@ -1,23 +1,27 @@
 import { FC, useMemo } from 'react';
-import { useDispatch, useSelector } from '../../services/store';
-import { useNavigate } from 'react-router-dom';
-import { BurgerConstructorUI } from '@ui';
 import { TConstructorIngredient } from '@utils-types';
-import { createOrder, clearOrder } from '../../services/slices/orderSlice';
+import { BurgerConstructorUI } from '@ui';
+import { useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from '../../services/store';
 import { deleteIngredient, resetConstructor } from '../../services/slices/constructorSlice';
+import { createOrder, clearOrder } from '../../services/slices/orderSlice';
 
 export const BurgerConstructor: FC = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
   const bun = useSelector((state) => state.burgerConstructor?.bun as TConstructorIngredient | null);
   const ingredients = useSelector((state) => state.burgerConstructor?.ingredients || []);
-  const orderRequest = useSelector((state) => state.order.isOrderRequesting);
-  const orderModalData = useSelector((state) => state.order.orderDetails);
-  const user = useSelector((state) => state.user.user);
+
   const constructorItems = {
     bun: bun,
     ingredients: ingredients,
   };
+
+  // Исправлено: используем правильные названия полей из orderSlice
+  const orderRequest = useSelector((state) => state.order.isOrderRequesting);
+  const orderModalData = useSelector((state) => state.order.orderDetails);
+  const user = useSelector((state) => state.user.user);
 
   const onOrderClick = () => {
     if (!constructorItems.bun || orderRequest) return;
