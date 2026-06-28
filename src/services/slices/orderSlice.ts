@@ -57,7 +57,7 @@ const orderSlice = createSlice({
       })
       .addCase(createOrder.rejected, (state, action) => {
         state.isOrderRequesting = false;
-        state.error = action.error.message || 'Ошибка оформления заказа';
+        state.error = action.error.message || 'Ошибка оформления';
       })
       .addCase(fetchOrderByNumber.pending, (state) => {
         state.isLoading = true;

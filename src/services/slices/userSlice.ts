@@ -82,7 +82,7 @@ const userSlice = createSlice({
       })
       .addCase(registerUser.rejected, (state, action) => {
         state.RequestLoginUser = false;
-        state.ErrorLoginUser = action.error.message || 'Ошибка регистрации';
+        state.ErrorLoginUser = action.error.message || 'Ошибка при регистрации';
         state.isAuthChecked = true;
       })
       .addCase(registerUser.fulfilled, (state, action) => {
@@ -97,7 +97,7 @@ const userSlice = createSlice({
       })
       .addCase(loginUser.rejected, (state, action) => {
         state.RequestLoginUser = false;
-        state.ErrorLoginUser = action.error.message || 'Ошибка входа';
+        state.ErrorLoginUser = action.error.message || 'Ошибка при входе в аккаунт';
         state.isAuthChecked = true;
       })
       .addCase(loginUser.fulfilled, (state, action) => {
