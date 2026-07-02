@@ -20,7 +20,7 @@ const initialState: TIngredientsState = {
 };
 
 const ingredientsSlice = createSlice({
-  name: 'ingredients',
+  name: 'ingredientsBurger',
   initialState,
   reducers: {},
   extraReducers: (builder) => {

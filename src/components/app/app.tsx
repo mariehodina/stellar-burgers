@@ -35,15 +35,15 @@ const App = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-  dispatch(fetchIngredients());
-  const accessToken = getCookie('accessToken');
-  if (accessToken) {
-    dispatch(getUser());
-  }
-}, [dispatch]);
+    dispatch(fetchIngredients());
+    const accessToken = getCookie('accessToken');
+    if (accessToken) {
+      dispatch(getUser());
+    }
+  }, [dispatch]);
 
-  const isLoading = useSelector((state) => state.ingredients.isLoading);
-  const errorMessage = useSelector((state) => state.ingredients.error);
+  const isIngredientsLoading = useSelector((state) => state.ingredients.isLoading);
+  const ingredientsError = useSelector((state) => state.ingredients.error);
 
   const handleModalClose = () => {
     navigate(-1);
@@ -65,13 +65,13 @@ const App = () => {
         <Route
           path='/'
           element={
-            isLoading ? (
+            isIngredientsLoading ? (
               <Preloader />
-            ) : errorMessage ? (
+            ) : ingredientsError ? (
               <div
                 className={`${styles.error} text text_type_main-medium pt-4`}
               >
-                {errorMessage}
+                {ingredientsError}
               </div>
             ) : (
               <ConstructorPage />

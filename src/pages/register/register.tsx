@@ -5,18 +5,18 @@ import { useDispatch, useSelector } from '../../services/store';
 import { registerUser } from '../../services/slices/userSlice';
 
 export const Register: FC = () => {
-  const [userName, setUserName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [registerName, setRegisterName] = useState('');
+  const [registerEmail, setRegisterEmail] = useState('');
+  const [registerPassword, setRegisterPassword] = useState('');
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const error = useSelector((state) => state.user.ErrorLoginUser);
-  const isLoading = useSelector((state) => state.user.RequestLoginUser);
+  const registerError = useSelector((state) => state.user.loginError);
+  const isRegisterLoading = useSelector((state) => state.user.isLoginLoading);
 
-  const handleSubmit = (e: SyntheticEvent) => {
+  const handleRegisterSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
-    dispatch(registerUser({ name: userName, email, password }))
+    dispatch(registerUser({ name: registerName, email: registerEmail, password: registerPassword }))
       .unwrap()
       .then(() => {
         navigate('/', { replace: true });
@@ -26,14 +26,14 @@ export const Register: FC = () => {
 
   return (
     <RegisterUI
-      errorText={error || ''}
-      email={email}
-      setEmail={setEmail}
-      userName={userName}
-      setUserName={setUserName}
-      password={password}
-      setPassword={setPassword}
-      handleSubmit={handleSubmit}
+      errorText={registerError || ''}
+      email={registerEmail}
+      setEmail={setRegisterEmail}
+      userName={registerName}
+      setUserName={setRegisterName}
+      password={registerPassword}
+      setPassword={setRegisterPassword}
+      handleSubmit={handleRegisterSubmit}
     />
   );
 };

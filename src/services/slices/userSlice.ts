@@ -15,16 +15,16 @@ type TUserState = {
   isAuthChecked: boolean;
   isAuthenticated: boolean;
   user: TUser | null;
-  ErrorLoginUser: string | null;
-  RequestLoginUser: boolean;
+  loginError: string | null;
+  isLoginLoading: boolean;
 };
 
 const initialState: TUserState = {
   isAuthChecked: false,
   isAuthenticated: false,
   user: null,
-  ErrorLoginUser: null,
-  RequestLoginUser: false
+  loginError: null,
+  isLoginLoading: false
 };
 
 export const registerUser = createAsyncThunk(
@@ -77,32 +77,32 @@ const userSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(registerUser.pending, (state) => {
-        state.RequestLoginUser = true;
-        state.ErrorLoginUser = null;
+        state.isLoginLoading = true;
+        state.loginError = null;
       })
       .addCase(registerUser.rejected, (state, action) => {
-        state.RequestLoginUser = false;
-        state.ErrorLoginUser = action.error.message || 'Ошибка при регистрации';
+        state.isLoginLoading = false;
+        state.loginError = action.error.message || 'Ошибка при регистрации';
         state.isAuthChecked = true;
       })
       .addCase(registerUser.fulfilled, (state, action) => {
         state.user = action.payload;
-        state.RequestLoginUser = false;
+        state.isLoginLoading = false;
         state.isAuthenticated = true;
         state.isAuthChecked = true;
       })
       .addCase(loginUser.pending, (state) => {
-        state.RequestLoginUser = true;
-        state.ErrorLoginUser = null;
+        state.isLoginLoading = true;
+        state.loginError = null;
       })
       .addCase(loginUser.rejected, (state, action) => {
-        state.RequestLoginUser = false;
-        state.ErrorLoginUser = action.error.message || 'Ошибка при входе в аккаунт';
+        state.isLoginLoading = false;
+        state.loginError = action.error.message || 'Ошибка при входе в аккаунт';
         state.isAuthChecked = true;
       })
       .addCase(loginUser.fulfilled, (state, action) => {
         state.user = action.payload;
-        state.RequestLoginUser = false;
+        state.isLoginLoading = false;
         state.isAuthenticated = true;
         state.isAuthChecked = true;
       })
@@ -112,16 +112,16 @@ const userSlice = createSlice({
         state.isAuthChecked = true;
       })
       .addCase(getUser.pending, (state) => {
-        state.RequestLoginUser = true;
+        state.isLoginLoading = true;
       })
       .addCase(getUser.rejected, (state) => {
-        state.RequestLoginUser = false;
+        state.isLoginLoading = false;
         state.isAuthChecked = true;
         state.isAuthenticated = false;
       })
       .addCase(getUser.fulfilled, (state, action) => {
         state.user = action.payload;
-        state.RequestLoginUser = false;
+        state.isLoginLoading = false;
         state.isAuthenticated = true;
         state.isAuthChecked = true;
       })

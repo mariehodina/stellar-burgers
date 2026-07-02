@@ -1,6 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { TOrder } from '@utils-types';
-import { orderBurgerApi, getOrderByNumberApi } from '@api';
+import { orderBurgerApi } from '@api';
 
 export const createOrder = createAsyncThunk(
   'order/createOrder',
@@ -10,27 +9,15 @@ export const createOrder = createAsyncThunk(
   }
 );
 
-export const fetchOrderByNumber = createAsyncThunk(
-  'order/fetchOrderByNumber',
-  async (number: number) => {
-    const response = await getOrderByNumberApi(number);
-    return response.orders[0];
-  }
-);
-
 type TOrderState = {
-  isOrderRequesting: boolean;
-  orderDetails: { number: number } | null;
-  currentOrder: TOrder | null;
-  isLoading: boolean;
+  orderRequest: boolean;
+  orderModalData: { number: number } | null;
   error: string | null;
 };
 
 const initialState: TOrderState = {
-  isOrderRequesting: false,
-  orderDetails: null,
-  currentOrder: null,
-  isLoading: false,
+  orderRequest: false,
+  orderModalData: null,
   error: null
 };
 
@@ -39,40 +26,25 @@ const orderSlice = createSlice({
   initialState,
   reducers: {
     clearOrder: (state) => {
-      state.orderDetails = null;
-    },
-    clearCurrentOrder: (state) => {
-      state.currentOrder = null;
+      state.orderModalData = null;
     }
   },
   extraReducers: (builder) => {
     builder
       .addCase(createOrder.pending, (state) => {
-        state.isOrderRequesting = true;
+        state.orderRequest = true;
         state.error = null;
       })
       .addCase(createOrder.fulfilled, (state, action) => {
-        state.isOrderRequesting = false;
-        state.orderDetails = { number: action.payload.number };
+        state.orderRequest = false;
+        state.orderModalData = { number: action.payload.number };
       })
       .addCase(createOrder.rejected, (state, action) => {
-        state.isOrderRequesting = false;
-        state.error = action.error.message || 'Ошибка оформления';
-      })
-      .addCase(fetchOrderByNumber.pending, (state) => {
-        state.isLoading = true;
-        state.error = null;
-      })
-      .addCase(fetchOrderByNumber.fulfilled, (state, action) => {
-        state.isLoading = false;
-        state.currentOrder = action.payload;
-      })
-      .addCase(fetchOrderByNumber.rejected, (state, action) => {
-        state.isLoading = false;
-        state.error = action.error.message || 'Ошибка получения заказа';
+        state.orderRequest = false;
+        state.error = action.error.message || 'Ошибка оформления заказа';
       });
   }
 });
 
-export const { clearOrder, clearCurrentOrder } = orderSlice.actions;
+export const { clearOrder } = orderSlice.actions;
 export const orderReducer = orderSlice.reducer;

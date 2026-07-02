@@ -10,30 +10,29 @@ export const BurgerConstructor: FC = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const bun = useSelector((state) => state.burgerConstructor?.bun as TConstructorIngredient | null);
-  const ingredients = useSelector((state) => state.burgerConstructor?.ingredients || []);
+  const currentBun = useSelector((state) => state.burgerConstructor?.bun as TConstructorIngredient | null);
+  const currentIngredients = useSelector((state) => state.burgerConstructor?.ingredients || []);
 
   const constructorItems = {
-    bun: bun,
-    ingredients: ingredients,
+    bun: currentBun,
+    ingredients: currentIngredients,
   };
 
-  // Исправлено: используем правильные названия полей из orderSlice
-  const orderRequest = useSelector((state) => state.order.isOrderRequesting);
-  const orderModalData = useSelector((state) => state.order.orderDetails);
-  const user = useSelector((state) => state.user.user);
+  const isOrderRequesting = useSelector((state) => state.order.orderRequest);
+  const orderDetailsData = useSelector((state) => state.order.orderModalData);
+  const currentUser = useSelector((state) => state.user.user);
 
-  const onOrderClick = () => {
-    if (!constructorItems.bun || orderRequest) return;
+  const handleOrderClick = () => {
+    if (!constructorItems.bun || isOrderRequesting) return;
 
-    if (!user) {
+    if (!currentUser) {
       navigate('/login');
       return;
     }
 
     const ingredientsIds = [
       constructorItems.bun._id,
-      ...constructorItems.ingredients.map((i: TConstructorIngredient) => i._id),
+      ...constructorItems.ingredients.map((item: TConstructorIngredient) => item._id),
       constructorItems.bun._id
     ];
     dispatch(createOrder(ingredientsIds))
@@ -43,19 +42,19 @@ export const BurgerConstructor: FC = () => {
       });
   };
 
-  const closeOrderModal = () => {
+  const handleCloseOrderModal = () => {
     dispatch(clearOrder());
   };
 
-  const onDeleteIngredient = (index: number) => {
+  const handleDeleteIngredient = (index: number) => {
     dispatch(deleteIngredient(index));
   };
 
-  const price = useMemo(
+  const totalPrice = useMemo(
     () =>
       (constructorItems.bun ? constructorItems.bun.price * 2 : 0) +
       constructorItems.ingredients.reduce(
-        (s: number, v: TConstructorIngredient) => s + v.price,
+        (sum: number, item: TConstructorIngredient) => sum + item.price,
         0
       ),
     [constructorItems]
@@ -63,13 +62,13 @@ export const BurgerConstructor: FC = () => {
 
   return (
     <BurgerConstructorUI
-      price={price}
-      orderRequest={orderRequest}
+      price={totalPrice}
+      orderRequest={isOrderRequesting}
       constructorItems={constructorItems}
-      orderModalData={orderModalData}
-      onOrderClick={onOrderClick}
-      closeOrderModal={closeOrderModal}
-      deleteIngredient={onDeleteIngredient}
+      orderModalData={orderDetailsData}
+      onOrderClick={handleOrderClick}
+      closeOrderModal={handleCloseOrderModal}
+      deleteIngredient={handleDeleteIngredient}
     />
   );
 };

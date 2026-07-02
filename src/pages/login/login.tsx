@@ -5,18 +5,18 @@ import { useDispatch, useSelector } from '../../services/store';
 import { loginUser } from '../../services/slices/userSlice';
 
 export const Login: FC = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [userEmail, setUserEmail] = useState('');
+  const [userPassword, setUserPassword] = useState('');
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
 
-  const error = useSelector((state) => state.user.ErrorLoginUser);
-  const isLoading = useSelector((state) => state.user.RequestLoginUser);
+  const loginError = useSelector((state) => state.user.loginError);
+  const isLoginLoading = useSelector((state) => state.user.isLoginLoading);
 
-  const handleSubmit = (e: SyntheticEvent) => {
+  const handleLoginSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
-    dispatch(loginUser({ email, password }))
+    dispatch(loginUser({ email: userEmail, password: userPassword }))
       .unwrap()
       .then(() => {
         const from = location.state?.from?.pathname || '/';
@@ -27,12 +27,12 @@ export const Login: FC = () => {
 
   return (
     <LoginUI
-      errorText={error || ''}
-      email={email}
-      setEmail={setEmail}
-      password={password}
-      setPassword={setPassword}
-      handleSubmit={handleSubmit}
+      errorText={loginError || ''}
+      email={userEmail}
+      setEmail={setUserEmail}
+      password={userPassword}
+      setPassword={setUserPassword}
+      handleSubmit={handleLoginSubmit}
     />
   );
 };

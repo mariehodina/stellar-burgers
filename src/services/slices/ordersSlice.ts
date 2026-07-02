@@ -2,10 +2,10 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { TOrder } from '@utils-types';
 import { getOrdersApi, getOrderByNumberApi } from '@api';
 
-export const fetchOrders = createAsyncThunk('orders/fetchOrders', getOrdersApi);
+export const getOrders = createAsyncThunk('orders/getOrders', getOrdersApi);
 
-export const fetchOrderByNumber = createAsyncThunk(
-  'orders/fetchOrderByNumber',
+export const getOrderByNumber = createAsyncThunk(
+  'orders/getOrderByNumber',
   async (number: number) => {
     const response = await getOrderByNumberApi(number);
     return response.orders[0];
@@ -15,14 +15,14 @@ export const fetchOrderByNumber = createAsyncThunk(
 type TOrdersState = {
   orders: TOrder[];
   currentOrder: TOrder | null;
-  isLoading: boolean;
+  loading: boolean;
   error: string | null;
 };
 
 const initialState: TOrdersState = {
   orders: [],
   currentOrder: null,
-  isLoading: false,
+  loading: false,
   error: null
 };
 
@@ -36,29 +36,29 @@ const ordersSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(fetchOrders.pending, (state) => {
-        state.isLoading = true;
+      .addCase(getOrders.pending, (state) => {
+        state.loading = true;
         state.error = null;
       })
-      .addCase(fetchOrders.fulfilled, (state, action) => {
-        state.isLoading = false;
+      .addCase(getOrders.fulfilled, (state, action) => {
+        state.loading = false;
         state.orders = action.payload;
       })
-      .addCase(fetchOrders.rejected, (state, action) => {
-        state.isLoading = false;
-        state.error = action.error.message || 'Ошибка загрузки';
+      .addCase(getOrders.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message || 'Ошибка загрузки заказов';
       })
-      .addCase(fetchOrderByNumber.pending, (state) => {
-        state.isLoading = true;
+      .addCase(getOrderByNumber.pending, (state) => {
+        state.loading = true;
         state.error = null;
       })
-      .addCase(fetchOrderByNumber.fulfilled, (state, action) => {
-        state.isLoading = false;
+      .addCase(getOrderByNumber.fulfilled, (state, action) => {
+        state.loading = false;
         state.currentOrder = action.payload;
       })
-      .addCase(fetchOrderByNumber.rejected, (state, action) => {
-        state.isLoading = false;
-        state.error = action.error.message || 'Ошибка загрузки';
+      .addCase(getOrderByNumber.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message || 'Ошибка загрузки заказа';
       });
   }
 });

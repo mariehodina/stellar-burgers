@@ -21,7 +21,7 @@ const initialState: TFeedState = {
 };
 
 const feedSlice = createSlice({
-  name: 'feed',
+  name: 'feedBurger',
   initialState,
   reducers: {},
   extraReducers: (builder) => {
