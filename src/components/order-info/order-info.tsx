@@ -5,7 +5,7 @@ import { TIngredient, TOrder } from '@utils-types';
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from '../../services/store';
 import {
-  fetchOrderByNumber,
+  getOrderByNumber,
   clearCurrentOrder
 } from '../../services/slices/ordersSlice';
 
@@ -16,11 +16,11 @@ export const OrderInfo: FC = () => {
 
   const ingredients = useSelector((state) => state.ingredients.ingredients);
 
-  const loading = useSelector((state) => state.orders.isLoading);
+  const loading = useSelector((state) => state.orders.loading);
 
   useEffect(() => {
     if (number) {
-      dispatch(fetchOrderByNumber(Number(number)));
+      dispatch(getOrderByNumber(Number(number)));
     }
     return () => {
       dispatch(clearCurrentOrder());

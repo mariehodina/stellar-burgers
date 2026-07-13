@@ -10,7 +10,6 @@ import {
   NotFound404
 } from '@pages';
 import styles from './app.module.css';
-
 import { AppHeader, Modal, OrderInfo, IngredientDetails } from '@components';
 import { Preloader } from '@ui';
 import { ProtectedRoute } from '../protected-route';
@@ -31,7 +30,6 @@ const App = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const modalBackground = location.state?.background;
-
   const dispatch = useDispatch();
 
   useEffect(() => {

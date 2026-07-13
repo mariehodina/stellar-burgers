@@ -5,26 +5,20 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from '../../services/store';
 import { deleteIngredient, resetConstructor } from '../../services/slices/constructorSlice';
 import { createOrder, clearOrder } from '../../services/slices/orderSlice';
-
 export const BurgerConstructor: FC = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
   const currentBun = useSelector((state) => state.burgerConstructor?.bun as TConstructorIngredient | null);
   const currentIngredients = useSelector((state) => state.burgerConstructor?.ingredients || []);
-
   const constructorItems = {
     bun: currentBun,
     ingredients: currentIngredients,
   };
-
   const isOrderRequesting = useSelector((state) => state.order.orderRequest);
   const orderDetailsData = useSelector((state) => state.order.orderModalData);
   const currentUser = useSelector((state) => state.user.user);
-
   const handleOrderClick = () => {
     if (!constructorItems.bun || isOrderRequesting) return;
-
     if (!currentUser) {
       navigate('/login');
       return;
