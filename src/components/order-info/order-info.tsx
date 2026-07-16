@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from '../../services/store';
 import {
   getBurgerOrderByNumber,
   clearBurgerCurrentOrder
-} from '../../services/slices/burgerOrdersSlice';
+} from '../../services/burgerSlices/burgerArchiveSlice';
 
 export const OrderInfo: FC = () => {
   const { number } = useParams();

@@ -1,7 +1,7 @@
 import { ProfileUI } from '@ui-pages';
 import { FC, SyntheticEvent, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from '../../services/store';
-import { updateBurgerUserData } from '../../services/slices/burgerUserSlice';
+import { updateBurgerUserData } from '../../services/burgerSlices/burgerUserSlice';
 
 export const Profile: FC = () => {
   const currentUser = useSelector((state) => state.user.user);

@@ -4,7 +4,7 @@ import { burgerUserReducer } from './burgerUserSlice';
 import { burgerConstructorReducer } from './burgerConstructorSlice';
 import { burgerOrderReducer } from './burgerOrderSlice';
 import { burgerFeedReducer } from './burgerFeedSlice';
-import { burgerOrdersReducer } from './burgerOrdersSlice';
+import { burgerOrdersReducer } from './burgerArchiveSlice';
 
 export const rootReducer = combineReducers({
   ingredients: burgerIngredientsReducer,
