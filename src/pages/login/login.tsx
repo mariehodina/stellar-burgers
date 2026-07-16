@@ -11,8 +11,8 @@ export const Login: FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const loginError = useSelector((state) => state.user.loginError);
-  const isLoginLoading = useSelector((state) => state.user.isLoginLoading);
+  const loginError = useSelector((state) => state.user?.loginError);
+  const isLoginLoading = useSelector((state) => state.user?.isLoginLoading);
 
   const handleLoginSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
