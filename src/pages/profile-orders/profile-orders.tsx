@@ -1,18 +1,18 @@
 import { ProfileOrdersUI } from '@ui-pages';
 import { FC, useEffect } from 'react';
 import { useDispatch, useSelector } from '../../services/store';
-import { fetchOrders } from '../../services/slices/ordersSlice';
+import { getBurgerOrders } from '../../services/slices/burgerOrdersSlice';
 import { Preloader } from '@ui';
 
 export const ProfileOrders: FC = () => {
   const dispatch = useDispatch();
-  const { orders, isLoading } = useSelector((state) => state.orders);
+  const { orders, loading } = useSelector((state) => state.orders);
 
   useEffect(() => {
-    dispatch(fetchOrders());
+    dispatch(getBurgerOrders());
   }, [dispatch]);
 
-  if (isLoading || !orders.length) {
+  if (loading) {
     return <Preloader />;
   }
 

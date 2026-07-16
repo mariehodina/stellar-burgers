@@ -1,7 +1,7 @@
 import { ProfileUI } from '@ui-pages';
 import { FC, SyntheticEvent, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from '../../services/store';
-import { updateUserData } from '../../services/slices/userSlice';
+import { updateBurgerUserData } from '../../services/slices/burgerUserSlice';
 
 export const Profile: FC = () => {
   const currentUser = useSelector((state) => state.user.user);
@@ -28,7 +28,7 @@ export const Profile: FC = () => {
 
   const handleFormSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
-    dispatch(updateUserData(profileForm))
+    dispatch(updateBurgerUserData(profileForm))
       .unwrap()
       .then(() => {
         setProfileForm((prev) => ({

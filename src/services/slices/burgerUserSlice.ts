@@ -11,7 +11,7 @@ import {
 } from '@api';
 import { setCookie, deleteCookie } from '../../utils/cookie';
 
-type TUserState = {
+type TBurgerUserState = {
   isAuthChecked: boolean;
   isAuthenticated: boolean;
   user: TUser | null;
@@ -19,7 +19,7 @@ type TUserState = {
   isLoginLoading: boolean;
 };
 
-const initialState: TUserState = {
+const initialState: TBurgerUserState = {
   isAuthChecked: false,
   isAuthenticated: false,
   user: null,
@@ -27,8 +27,8 @@ const initialState: TUserState = {
   isLoginLoading: false
 };
 
-export const registerUser = createAsyncThunk(
-  'user/registerUser',
+export const registerBurgerUser = createAsyncThunk(
+  'burgerUser/registerBurgerUser',
   async (data: TRegisterData) => {
     const response = await registerUserApi(data);
     setCookie('accessToken', response.accessToken);
@@ -37,8 +37,8 @@ export const registerUser = createAsyncThunk(
   }
 );
 
-export const loginUser = createAsyncThunk(
-  'user/loginUser',
+export const loginBurgerUser = createAsyncThunk(
+  'burgerUser/loginBurgerUser',
   async (data: TLoginData) => {
     const response = await loginUserApi(data);
     setCookie('accessToken', response.accessToken);
@@ -47,89 +47,95 @@ export const loginUser = createAsyncThunk(
   }
 );
 
-export const logoutUser = createAsyncThunk('user/logoutUser', async () => {
-  await logoutApi();
-  deleteCookie('accessToken');
-  localStorage.removeItem('refreshToken');
-});
+export const logoutBurgerUser = createAsyncThunk(
+  'burgerUser/logoutBurgerUser',
+  async () => {
+    await logoutApi();
+    deleteCookie('accessToken');
+    localStorage.removeItem('refreshToken');
+  }
+);
 
-export const getUser = createAsyncThunk('user/getUser', async () => {
-  const response = await getUserApi();
-  return response.user;
-});
+export const getBurgerUser = createAsyncThunk(
+  'burgerUser/getBurgerUser',
+  async () => {
+    const response = await getUserApi();
+    return response.user;
+  }
+);
 
-export const updateUserData = createAsyncThunk(
-  'user/updateUser',
+export const updateBurgerUserData = createAsyncThunk(
+  'burgerUser/updateBurgerUser',
   async (user: Partial<TRegisterData>) => {
     const response = await updateUserApi(user);
     return response.user;
   }
 );
 
-const userSlice = createSlice({
-  name: 'user',
+const burgerUserSlice = createSlice({
+  name: 'burgerUser',
   initialState,
   reducers: {
-    authChecked: (state) => {
+    authBurgerChecked: (state) => {
       state.isAuthChecked = true;
     }
   },
   extraReducers: (builder) => {
     builder
-      .addCase(registerUser.pending, (state) => {
+      .addCase(registerBurgerUser.pending, (state) => {
         state.isLoginLoading = true;
         state.loginError = null;
       })
-      .addCase(registerUser.rejected, (state, action) => {
+      .addCase(registerBurgerUser.rejected, (state, action) => {
         state.isLoginLoading = false;
         state.loginError = action.error.message || 'Ошибка при регистрации';
         state.isAuthChecked = true;
       })
-      .addCase(registerUser.fulfilled, (state, action) => {
+      .addCase(registerBurgerUser.fulfilled, (state, action) => {
         state.user = action.payload;
         state.isLoginLoading = false;
         state.isAuthenticated = true;
         state.isAuthChecked = true;
       })
-      .addCase(loginUser.pending, (state) => {
+      .addCase(loginBurgerUser.pending, (state) => {
         state.isLoginLoading = true;
         state.loginError = null;
       })
-      .addCase(loginUser.rejected, (state, action) => {
+      .addCase(loginBurgerUser.rejected, (state, action) => {
         state.isLoginLoading = false;
         state.loginError = action.error.message || 'Ошибка при входе в аккаунт';
         state.isAuthChecked = true;
       })
-      .addCase(loginUser.fulfilled, (state, action) => {
+      .addCase(loginBurgerUser.fulfilled, (state, action) => {
         state.user = action.payload;
         state.isLoginLoading = false;
         state.isAuthenticated = true;
         state.isAuthChecked = true;
       })
-      .addCase(logoutUser.fulfilled, (state) => {
+      .addCase(logoutBurgerUser.fulfilled, (state) => {
         state.user = null;
         state.isAuthenticated = false;
         state.isAuthChecked = true;
       })
-      .addCase(getUser.pending, (state) => {
+      .addCase(getBurgerUser.pending, (state) => {
         state.isLoginLoading = true;
       })
-      .addCase(getUser.rejected, (state) => {
+      .addCase(getBurgerUser.rejected, (state) => {
         state.isLoginLoading = false;
         state.isAuthChecked = true;
         state.isAuthenticated = false;
       })
-      .addCase(getUser.fulfilled, (state, action) => {
+      .addCase(getBurgerUser.fulfilled, (state, action) => {
         state.user = action.payload;
         state.isLoginLoading = false;
         state.isAuthenticated = true;
         state.isAuthChecked = true;
       })
-      .addCase(updateUserData.fulfilled, (state, action) => {
+      .addCase(updateBurgerUserData.fulfilled, (state, action) => {
         state.user = action.payload;
       });
   }
 });
 
-export const { authChecked } = userSlice.actions;
-export const userReducer = userSlice.reducer;
+export const { authBurgerChecked } = burgerUserSlice.actions;
+export const burgerUserReducer = burgerUserSlice.reducer;

@@ -2,66 +2,69 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { TOrder } from '@utils-types';
 import { getOrdersApi, getOrderByNumberApi } from '@api';
 
-export const getOrders = createAsyncThunk('orders/getOrders', getOrdersApi);
+export const getBurgerOrders = createAsyncThunk(
+  'burgerOrders/getBurgerOrders',
+  getOrdersApi
+);
 
-export const getOrderByNumber = createAsyncThunk(
-  'orders/getOrderByNumber',
+export const getBurgerOrderByNumber = createAsyncThunk(
+  'burgerOrders/getBurgerOrderByNumber',
   async (number: number) => {
     const response = await getOrderByNumberApi(number);
     return response.orders[0];
   }
 );
 
-type TOrdersState = {
+type TBurgerOrdersState = {
   orders: TOrder[];
   currentOrder: TOrder | null;
   loading: boolean;
   error: string | null;
 };
 
-const initialState: TOrdersState = {
+const initialState: TBurgerOrdersState = {
   orders: [],
   currentOrder: null,
   loading: false,
   error: null
 };
 
-const ordersSlice = createSlice({
-  name: 'orders',
+const burgerOrdersSlice = createSlice({
+  name: 'burgerOrders',
   initialState,
   reducers: {
-    clearCurrentOrder: (state) => {
+    clearBurgerCurrentOrder: (state) => {
       state.currentOrder = null;
     }
   },
   extraReducers: (builder) => {
     builder
-      .addCase(getOrders.pending, (state) => {
+      .addCase(getBurgerOrders.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(getOrders.fulfilled, (state, action) => {
+      .addCase(getBurgerOrders.fulfilled, (state, action) => {
         state.loading = false;
         state.orders = action.payload;
       })
-      .addCase(getOrders.rejected, (state, action) => {
+      .addCase(getBurgerOrders.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message || 'Ошибка загрузки заказов';
       })
-      .addCase(getOrderByNumber.pending, (state) => {
+      .addCase(getBurgerOrderByNumber.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(getOrderByNumber.fulfilled, (state, action) => {
+      .addCase(getBurgerOrderByNumber.fulfilled, (state, action) => {
         state.loading = false;
         state.currentOrder = action.payload;
       })
-      .addCase(getOrderByNumber.rejected, (state, action) => {
+      .addCase(getBurgerOrderByNumber.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message || 'Ошибка загрузки заказа';
       });
   }
 });
 
-export const { clearCurrentOrder } = ordersSlice.actions;
-export const ordersReducer = ordersSlice.reducer;
+export const { clearBurgerCurrentOrder } = burgerOrdersSlice.actions;
+export const burgerOrdersReducer = burgerOrdersSlice.reducer;

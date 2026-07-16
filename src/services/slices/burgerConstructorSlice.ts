@@ -2,21 +2,21 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { TConstructorIngredient, TIngredient } from '@utils-types';
 import { v4 as uuidv4 } from 'uuid';
 
-type TConstructorState = {
+type TBurgerConstructorState = {
   bun: TIngredient | null;
   ingredients: TConstructorIngredient[];
 };
 
-const initialState: TConstructorState = {
+const initialState: TBurgerConstructorState = {
   bun: null,
   ingredients: []
 };
 
-const constructorSlice = createSlice({
+const burgerConstructorSlice = createSlice({
   name: 'burgerConstructor',
   initialState,
   reducers: {
-    addIngredient: {
+    addBurgerIngredient: {
       reducer: (state, action: PayloadAction<TConstructorIngredient>) => {
         if (action.payload.type === 'bun') {
           state.bun = action.payload;
@@ -28,10 +28,10 @@ const constructorSlice = createSlice({
         payload: { ...ingredient, id: uuidv4() }
       })
     },
-    deleteIngredient: (state, action: PayloadAction<number>) => {
+    removeBurgerIngredient: (state, action: PayloadAction<number>) => {
       state.ingredients.splice(action.payload, 1);
     },
-    reorderIngredient: (
+    moveBurgerIngredient: (
       state,
       action: PayloadAction<{ fromIndex: number; toIndex: number }>
     ) => {
@@ -40,7 +40,7 @@ const constructorSlice = createSlice({
       state.ingredients.splice(fromIndex, 1);
       state.ingredients.splice(toIndex, 0, item);
     },
-    resetConstructor: (state) => {
+    clearBurgerConstructor: (state) => {
       state.bun = null;
       state.ingredients = [];
     }
@@ -48,9 +48,10 @@ const constructorSlice = createSlice({
 });
 
 export const {
-  addIngredient,
-  deleteIngredient,
-  reorderIngredient,
-  resetConstructor
-} = constructorSlice.actions;
-export const constructorReducer = constructorSlice.reducer;
+  addBurgerIngredient,
+  removeBurgerIngredient,
+  moveBurgerIngredient,
+  clearBurgerConstructor
+} = burgerConstructorSlice.actions;
+
+export const burgerConstructorReducer = burgerConstructorSlice.reducer;

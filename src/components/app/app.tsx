@@ -22,8 +22,8 @@ import {
 } from 'react-router-dom';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from '../../services/store';
-import { fetchIngredients } from '../../services/slices/ingredientsSlice';
-import { getUser } from '../../services/slices/userSlice';
+import { fetchBurgerIngredients } from '../../services/slices/burgerIngredientsSlice';
+import { getBurgerUser } from '../../services/slices/burgerUserSlice';
 import { getCookie } from '../../utils/cookie';
 
 const App = () => {
@@ -33,10 +33,10 @@ const App = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(fetchIngredients());
+    dispatch(fetchBurgerIngredients());
     const accessToken = getCookie('accessToken');
     if (accessToken) {
-      dispatch(getUser());
+      dispatch(getBurgerUser());
     }
   }, [dispatch]);
 

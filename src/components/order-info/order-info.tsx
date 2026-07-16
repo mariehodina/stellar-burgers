@@ -5,9 +5,9 @@ import { TIngredient, TOrder } from '@utils-types';
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from '../../services/store';
 import {
-  getOrderByNumber,
-  clearCurrentOrder
-} from '../../services/slices/ordersSlice';
+  getBurgerOrderByNumber,
+  clearBurgerCurrentOrder
+} from '../../services/slices/burgerOrdersSlice';
 
 export const OrderInfo: FC = () => {
   const { number } = useParams();
@@ -20,10 +20,10 @@ export const OrderInfo: FC = () => {
 
   useEffect(() => {
     if (number) {
-      dispatch(getOrderByNumber(Number(number)));
+      dispatch(getBurgerOrderByNumber(Number(number)));
     }
     return () => {
-      dispatch(clearCurrentOrder());
+      dispatch(clearBurgerCurrentOrder());
     };
   }, [dispatch, number]);
 

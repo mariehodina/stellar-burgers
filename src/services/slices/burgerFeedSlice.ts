@@ -2,9 +2,12 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { TOrder, TOrdersData } from '@utils-types';
 import { getFeedsApi } from '@api';
 
-export const fetchFeeds = createAsyncThunk('feed/fetchFeeds', getFeedsApi);
+export const fetchBurgerFeeds = createAsyncThunk(
+  'feedBurger/fetchBurgerFeeds',
+  getFeedsApi
+);
 
-type TFeedState = {
+type TBurgerFeedState = {
   orders: TOrder[];
   total: number;
   totalToday: number;
@@ -12,7 +15,7 @@ type TFeedState = {
   error: string | null;
 };
 
-const initialState: TFeedState = {
+const initialState: TBurgerFeedState = {
   orders: [],
   total: 0,
   totalToday: 0,
@@ -20,27 +23,27 @@ const initialState: TFeedState = {
   error: null
 };
 
-const feedSlice = createSlice({
+const burgerFeedSlice = createSlice({
   name: 'feedBurger',
   initialState,
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(fetchFeeds.pending, (state) => {
+      .addCase(fetchBurgerFeeds.pending, (state) => {
         state.isLoading = true;
         state.error = null;
       })
-      .addCase(fetchFeeds.fulfilled, (state, action) => {
+      .addCase(fetchBurgerFeeds.fulfilled, (state, action) => {
         state.isLoading = false;
         state.orders = action.payload.orders;
         state.total = action.payload.total;
         state.totalToday = action.payload.totalToday;
       })
-      .addCase(fetchFeeds.rejected, (state, action) => {
+      .addCase(fetchBurgerFeeds.rejected, (state, action) => {
         state.isLoading = false;
-        state.error = action.error.message || 'Ошибка';
+        state.error = action.error.message || 'Ошибка загрузки ленты';
       });
   }
 });
 
-export const feedReducer = feedSlice.reducer;
+export const burgerFeedReducer = burgerFeedSlice.reducer;

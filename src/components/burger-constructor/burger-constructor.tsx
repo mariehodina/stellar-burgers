@@ -3,22 +3,35 @@ import { TConstructorIngredient } from '@utils-types';
 import { BurgerConstructorUI } from '@ui';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from '../../services/store';
-import { deleteIngredient, resetConstructor } from '../../services/slices/constructorSlice';
-import { createOrder, clearOrder } from '../../services/slices/orderSlice';
+import { 
+  removeBurgerIngredient, 
+  clearBurgerConstructor 
+} from '../../services/slices/burgerConstructorSlice';
+import { createBurgerOrder, clearBurgerOrder } from '../../services/slices/burgerOrderSlice';
+
 export const BurgerConstructor: FC = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const currentBun = useSelector((state) => state.burgerConstructor?.bun as TConstructorIngredient | null);
-  const currentIngredients = useSelector((state) => state.burgerConstructor?.ingredients || []);
+
+  const currentBun = useSelector(
+    (state) => state.burgerConstructor?.bun as TConstructorIngredient | null
+  );
+  const currentIngredients = useSelector(
+    (state) => state.burgerConstructor?.ingredients || []
+  );
+
   const constructorItems = {
     bun: currentBun,
     ingredients: currentIngredients,
   };
+
   const isOrderRequesting = useSelector((state) => state.order.orderRequest);
   const orderDetailsData = useSelector((state) => state.order.orderModalData);
   const currentUser = useSelector((state) => state.user.user);
+
   const handleOrderClick = () => {
     if (!constructorItems.bun || isOrderRequesting) return;
+
     if (!currentUser) {
       navigate('/login');
       return;
@@ -29,19 +42,20 @@ export const BurgerConstructor: FC = () => {
       ...constructorItems.ingredients.map((item: TConstructorIngredient) => item._id),
       constructorItems.bun._id
     ];
-    dispatch(createOrder(ingredientsIds))
+
+    dispatch(createBurgerOrder(ingredientsIds))
       .unwrap()
       .then(() => {
-        dispatch(resetConstructor());
+        dispatch(clearBurgerConstructor());
       });
   };
 
   const handleCloseOrderModal = () => {
-    dispatch(clearOrder());
+    dispatch(clearBurgerOrder());
   };
 
   const handleDeleteIngredient = (index: number) => {
-    dispatch(deleteIngredient(index));
+    dispatch(removeBurgerIngredient(index));
   };
 
   const totalPrice = useMemo(

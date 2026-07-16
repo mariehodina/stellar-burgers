@@ -2,42 +2,42 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { TIngredient } from '@utils-types';
 import { getIngredientsApi } from '@api';
 
-export const fetchIngredients = createAsyncThunk<TIngredient[]>(
-  'ingredients/fetchIngredients',
+export const fetchBurgerIngredients = createAsyncThunk<TIngredient[]>(
+  'ingredientsBurger/fetchBurgerIngredients',
   getIngredientsApi
 );
 
-type TIngredientsState = {
+type TBurgerIngredientsState = {
   ingredients: TIngredient[];
   isLoading: boolean;
   error: string | null;
 };
 
-const initialState: TIngredientsState = {
+const initialState: TBurgerIngredientsState = {
   ingredients: [],
   isLoading: false,
   error: null
 };
 
-const ingredientsSlice = createSlice({
+const burgerIngredientsSlice = createSlice({
   name: 'ingredientsBurger',
   initialState,
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(fetchIngredients.pending, (state) => {
+      .addCase(fetchBurgerIngredients.pending, (state) => {
         state.isLoading = true;
         state.error = null;
       })
-      .addCase(fetchIngredients.fulfilled, (state, action) => {
+      .addCase(fetchBurgerIngredients.fulfilled, (state, action) => {
         state.isLoading = false;
         state.ingredients = action.payload;
       })
-      .addCase(fetchIngredients.rejected, (state, action) => {
+      .addCase(fetchBurgerIngredients.rejected, (state, action) => {
         state.isLoading = false;
-        state.error = action.error.message || 'Ошибка';
+        state.error = action.error.message || 'Ошибка загрузки ингредиентов';
       });
   }
 });
 
-export const ingredientsReducer = ingredientsSlice.reducer;
+export const burgerIngredientsReducer = burgerIngredientsSlice.reducer;
