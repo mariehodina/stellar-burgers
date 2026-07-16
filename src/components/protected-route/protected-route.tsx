@@ -16,10 +16,6 @@ export const ProtectedRoute: FC<TProtectedRouteProps> = ({
   const user = useSelector((state) => state.user.user);
   const location = useLocation();
 
-  if (!isAuthChecked) {
-    return <Preloader />;
-  }
-
   if (!onlyUnAuth && !user) {
     return <Navigate to='/login' state={{ from: location }} />;
   }
