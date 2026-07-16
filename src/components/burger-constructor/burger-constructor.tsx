@@ -6,8 +6,8 @@ import { useDispatch, useSelector } from '../../services/store';
 import { 
   removeBurgerIngredient, 
   clearBurgerConstructor 
-} from '../../services/burgerSlices/burgerConstructorSlice';
-import { createBurgerOrder, clearBurgerOrder } from '../../services/burgerSlices/burgerOrderSlice';
+} from '../../services/slices/burgerConstructorSlice';
+import { createBurgerOrder, clearBurgerOrder } from '../../services/slices/burgerOrderSlice';
 
 export const BurgerConstructor: FC = () => {
   const dispatch = useDispatch();

@@ -22,8 +22,8 @@ import {
 } from 'react-router-dom';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from '../../services/store';
-import { fetchBurgerIngredients } from '../../services/burgerSlices/burgerIngredientsSlice';
-import { getBurgerUser } from '../../services/burgerSlices/burgerUserSlice';
+import { fetchBurgerIngredients } from '../../services/slices/burgerIngredientsSlice';
+import { getBurgerUser } from '../../services/slices/burgerUserSlice';
 import { getCookie } from '../../utils/cookie';
 
 const App = () => {
