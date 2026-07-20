@@ -16,7 +16,13 @@ export const Register: FC = () => {
 
   const handleRegisterSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
-    dispatch(registerBurgerUser({ name: registerName, email: registerEmail, password: registerPassword }))
+    dispatch(
+      registerBurgerUser({
+        name: registerName,
+        email: registerEmail,
+        password: registerPassword
+      })
+    )
       .unwrap()
       .then(() => {
         navigate('/', { replace: true });

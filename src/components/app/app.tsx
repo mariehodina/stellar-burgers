@@ -40,7 +40,9 @@ const App = () => {
     }
   }, [dispatch]);
 
-  const isIngredientsLoading = useSelector((state) => state.ingredients.isLoading);
+  const isIngredientsLoading = useSelector(
+    (state) => state.ingredients.isLoading
+  );
   const ingredientsError = useSelector((state) => state.ingredients.error);
 
   const handleModalClose = () => {

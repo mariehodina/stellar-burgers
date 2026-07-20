@@ -15,5 +15,10 @@ export const Feed: FC = () => {
   if (!orders.length) {
     return <Preloader />;
   }
-  return <FeedUI orders={orders} handleGetFeeds={() => dispatch(fetchBurgerFeeds())} />;
+  return (
+    <FeedUI
+      orders={orders}
+      handleGetFeeds={() => dispatch(fetchBurgerFeeds())}
+    />
+  );
 };

@@ -3,11 +3,14 @@ import { TConstructorIngredient } from '@utils-types';
 import { BurgerConstructorUI } from '@ui';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from '../../services/store';
-import { 
-  removeBurgerIngredient, 
-  clearBurgerConstructor 
+import {
+  removeBurgerIngredient,
+  clearBurgerConstructor
 } from '../../services/slices/burgerConstructorSlice';
-import { createBurgerOrder, clearBurgerOrder } from '../../services/slices/burgerOrderSlice';
+import {
+  createBurgerOrder,
+  clearBurgerOrder
+} from '../../services/slices/burgerOrderSlice';
 
 export const BurgerConstructor: FC = () => {
   const dispatch = useDispatch();
@@ -22,7 +25,7 @@ export const BurgerConstructor: FC = () => {
 
   const constructorItems = {
     bun: currentBun,
-    ingredients: currentIngredients,
+    ingredients: currentIngredients
   };
 
   const isOrderRequesting = useSelector((state) => state.order.orderRequest);
@@ -39,7 +42,9 @@ export const BurgerConstructor: FC = () => {
 
     const ingredientsIds = [
       constructorItems.bun._id,
-      ...constructorItems.ingredients.map((item: TConstructorIngredient) => item._id),
+      ...constructorItems.ingredients.map(
+        (item: TConstructorIngredient) => item._id
+      ),
       constructorItems.bun._id
     ];
 

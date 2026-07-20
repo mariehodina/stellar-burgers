@@ -12,15 +12,17 @@ export const BurgerIngredient: FC<TBurgerIngredientProps> = memo(
     const dispatch = useDispatch();
 
     const constructorState = useSelector((state) => state.burgerConstructor);
-    
-    const count = propCount !== undefined ? propCount :
-      ingredient.type === 'bun'
-        ? constructorState?.bun?._id === ingredient._id
-          ? 2
-          : 0
-        : (constructorState?.ingredients || []).filter(
-            (item: TConstructorIngredient) => item._id === ingredient._id
-          ).length;
+
+    const count =
+      propCount !== undefined
+        ? propCount
+        : ingredient.type === 'bun'
+          ? constructorState?.bun?._id === ingredient._id
+            ? 2
+            : 0
+          : (constructorState?.ingredients || []).filter(
+              (item: TConstructorIngredient) => item._id === ingredient._id
+            ).length;
 
     const handleAdd = () => {
       dispatch(addBurgerIngredient(ingredient));
