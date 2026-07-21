@@ -18,12 +18,13 @@ import {
   Route,
   useLocation,
   useNavigate,
-  useParams
+  useParams,
+  useMatch
 } from 'react-router-dom';
-import { useEffect } from 'react';
+import { useEffect, useCallback, useMemo } from 'react';
 import { useDispatch, useSelector } from '../../services/store';
 import { fetchBurgerIngredients } from '../../services/slices/burgerIngredientsSlice';
-import { getBurgerUser } from '../../services/slices/burgerUserSlice';
+import { getBurgerUser, authBurgerChecked } from '../../services/slices/burgerUserSlice';
 import { getCookie } from '../../utils/cookie';
 
 const App = () => {
@@ -32,31 +33,33 @@ const App = () => {
   const modalBackground = location.state?.background;
   const dispatch = useDispatch();
 
+  const orderMatch = useMatch('/feed/:number') || useMatch('/profile/orders/:number');
+  const orderNumber = orderMatch?.params.number;
+
   useEffect(() => {
     dispatch(fetchBurgerIngredients());
     const accessToken = getCookie('accessToken');
     if (accessToken) {
       dispatch(getBurgerUser());
+    } else {
+      dispatch(authBurgerChecked()); 
     }
   }, [dispatch]);
 
-  const isIngredientsLoading = useSelector(
-    (state) => state.ingredients.isLoading
-  );
-  const ingredientsError = useSelector((state) => state.ingredients.error);
+  const isLoading = useSelector((state) => state.ingredients.isLoading);
+  const errorMessage = useSelector((state) => state.ingredients.error);
 
-  const handleModalClose = () => {
+  const handleModalClose = useCallback(() => {
     navigate(-1);
-  };
+  }, [navigate]);
 
-  const OrderModal = () => {
-    const { number: orderNumber } = useParams();
+  const OrderModalContent = useMemo(() => {
     return (
       <Modal onClose={handleModalClose} title={`#${orderNumber}`}>
         <OrderInfo />
       </Modal>
     );
-  };
+  }, [handleModalClose, orderNumber]);
 
   return (
     <div className={styles.app}>
@@ -65,13 +68,13 @@ const App = () => {
         <Route
           path='/'
           element={
-            isIngredientsLoading ? (
+            isLoading ? (
               <Preloader />
-            ) : ingredientsError ? (
+            ) : errorMessage ? (
               <div
                 className={`${styles.error} text text_type_main-medium pt-4`}
               >
-                {ingredientsError}
+                {errorMessage}
               </div>
             ) : (
               <ConstructorPage />
@@ -161,7 +164,7 @@ const App = () => {
 
       {modalBackground && (
         <Routes>
-          <Route path='/feed/:number' element={<OrderModal />} />
+          <Route path='/feed/:number' element={OrderModalContent} />
           <Route
             path='/ingredients/:id'
             element={
@@ -174,7 +177,7 @@ const App = () => {
             path='/profile/orders/:number'
             element={
               <ProtectedRoute>
-                <OrderModal />
+                {OrderModalContent}
               </ProtectedRoute>
             }
           />

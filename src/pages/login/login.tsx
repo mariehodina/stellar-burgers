@@ -11,9 +11,8 @@ export const Login: FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const loginError = useSelector((state) => state.user?.loginError);
-  const isLoginLoading = useSelector((state) => state.user?.isLoginLoading);
-
+  const authError = useSelector((state) => state.user.authError);
+const isAuthLoading = useSelector((state) => state.user.isAuthLoading);
   const handleLoginSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
     dispatch(loginBurgerUser({ email: userEmail, password: userPassword }))
@@ -27,7 +26,7 @@ export const Login: FC = () => {
 
   return (
     <LoginUI
-      errorText={loginError || ''}
+      errorText={authError || ''}
       email={userEmail}
       setEmail={setUserEmail}
       password={userPassword}

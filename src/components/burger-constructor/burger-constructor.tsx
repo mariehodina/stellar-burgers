@@ -70,7 +70,7 @@ export const BurgerConstructor: FC = () => {
         (sum: number, item: TConstructorIngredient) => sum + item.price,
         0
       ),
-    [constructorItems]
+    [currentBun, currentIngredients]
   );
 
   return (

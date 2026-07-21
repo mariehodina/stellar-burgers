@@ -15,16 +15,16 @@ type TBurgerUserState = {
   isAuthChecked: boolean;
   isAuthenticated: boolean;
   user: TUser | null;
-  loginError: string | null;
-  isLoginLoading: boolean;
+  authError: string | null;       // ← переименовано
+  isAuthLoading: boolean;         // ← переименовано
 };
 
 const initialState: TBurgerUserState = {
   isAuthChecked: false,
   isAuthenticated: false,
   user: null,
-  loginError: null,
-  isLoginLoading: false
+  authError: null,
+  isAuthLoading: false
 };
 
 export const registerBurgerUser = createAsyncThunk(
@@ -82,55 +82,60 @@ const burgerUserSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+      // Регистрация
       .addCase(registerBurgerUser.pending, (state) => {
-        state.isLoginLoading = true;
-        state.loginError = null;
+        state.isAuthLoading = true;
+        state.authError = null;
       })
       .addCase(registerBurgerUser.rejected, (state, action) => {
-        state.isLoginLoading = false;
-        state.loginError = action.error.message || 'Ошибка при регистрации';
+        state.isAuthLoading = false;
+        state.authError = action.error.message || 'Ошибка при регистрации';
         state.isAuthChecked = true;
       })
       .addCase(registerBurgerUser.fulfilled, (state, action) => {
         state.user = action.payload;
-        state.isLoginLoading = false;
+        state.isAuthLoading = false;
         state.isAuthenticated = true;
         state.isAuthChecked = true;
       })
+      // Вход
       .addCase(loginBurgerUser.pending, (state) => {
-        state.isLoginLoading = true;
-        state.loginError = null;
+        state.isAuthLoading = true;
+        state.authError = null;
       })
       .addCase(loginBurgerUser.rejected, (state, action) => {
-        state.isLoginLoading = false;
-        state.loginError = action.error.message || 'Ошибка при входе в аккаунт';
+        state.isAuthLoading = false;
+        state.authError = action.error.message || 'Ошибка при входе в аккаунт';
         state.isAuthChecked = true;
       })
       .addCase(loginBurgerUser.fulfilled, (state, action) => {
         state.user = action.payload;
-        state.isLoginLoading = false;
+        state.isAuthLoading = false;
         state.isAuthenticated = true;
         state.isAuthChecked = true;
       })
+      // Выход
       .addCase(logoutBurgerUser.fulfilled, (state) => {
         state.user = null;
         state.isAuthenticated = false;
         state.isAuthChecked = true;
       })
+      // Получение пользователя
       .addCase(getBurgerUser.pending, (state) => {
-        state.isLoginLoading = true;
+        state.isAuthLoading = true;
       })
       .addCase(getBurgerUser.rejected, (state) => {
-        state.isLoginLoading = false;
+        state.isAuthLoading = false;
         state.isAuthChecked = true;
         state.isAuthenticated = false;
       })
       .addCase(getBurgerUser.fulfilled, (state, action) => {
         state.user = action.payload;
-        state.isLoginLoading = false;
+        state.isAuthLoading = false;
         state.isAuthenticated = true;
         state.isAuthChecked = true;
       })
+      // Обновление
       .addCase(updateBurgerUserData.fulfilled, (state, action) => {
         state.user = action.payload;
       });
