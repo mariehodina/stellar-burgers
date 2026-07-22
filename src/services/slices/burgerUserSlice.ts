@@ -15,8 +15,8 @@ type TBurgerUserState = {
   isAuthChecked: boolean;
   isAuthenticated: boolean;
   user: TUser | null;
-  authError: string | null;       // ← переименовано
-  isAuthLoading: boolean;         // ← переименовано
+  authError: string | null; // ← переименовано
+  isAuthLoading: boolean; // ← переименовано
 };
 
 const initialState: TBurgerUserState = {

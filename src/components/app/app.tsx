@@ -10,6 +10,7 @@ import {
   NotFound404
 } from '@pages';
 import styles from './app.module.css';
+import '../../index.css';
 import { AppHeader, Modal, OrderInfo, IngredientDetails } from '@components';
 import { Preloader } from '@ui';
 import { ProtectedRoute } from '../protected-route';
@@ -24,7 +25,10 @@ import {
 import { useEffect, useCallback, useMemo } from 'react';
 import { useDispatch, useSelector } from '../../services/store';
 import { fetchBurgerIngredients } from '../../services/slices/burgerIngredientsSlice';
-import { getBurgerUser, authBurgerChecked } from '../../services/slices/burgerUserSlice';
+import {
+  getBurgerUser,
+  authBurgerChecked
+} from '../../services/slices/burgerUserSlice';
 import { getCookie } from '../../utils/cookie';
 
 const App = () => {
@@ -33,7 +37,8 @@ const App = () => {
   const modalBackground = location.state?.background;
   const dispatch = useDispatch();
 
-  const orderMatch = useMatch('/feed/:number') || useMatch('/profile/orders/:number');
+  const orderMatch =
+    useMatch('/feed/:number') || useMatch('/profile/orders/:number');
   const orderNumber = orderMatch?.params.number;
 
   useEffect(() => {
@@ -42,7 +47,7 @@ const App = () => {
     if (accessToken) {
       dispatch(getBurgerUser());
     } else {
-      dispatch(authBurgerChecked()); 
+      dispatch(authBurgerChecked());
     }
   }, [dispatch]);
 
@@ -175,11 +180,7 @@ const App = () => {
           />
           <Route
             path='/profile/orders/:number'
-            element={
-              <ProtectedRoute>
-                {OrderModalContent}
-              </ProtectedRoute>
-            }
+            element={<ProtectedRoute>{OrderModalContent}</ProtectedRoute>}
           />
         </Routes>
       )}

@@ -12,11 +12,17 @@ export const Register: FC = () => {
   const navigate = useNavigate();
 
   const authError = useSelector((state) => state.user.authError);
-const isAuthLoading = useSelector((state) => state.user.isAuthLoading);
+  const isAuthLoading = useSelector((state) => state.user.isAuthLoading);
 
   const handleRegisterSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
-    dispatch(registerBurgerUser({ name: registerName, email: registerEmail, password: registerPassword }))
+    dispatch(
+      registerBurgerUser({
+        name: registerName,
+        email: registerEmail,
+        password: registerPassword
+      })
+    )
       .unwrap()
       .then(() => {
         navigate('/', { replace: true });
@@ -26,7 +32,7 @@ const isAuthLoading = useSelector((state) => state.user.isAuthLoading);
 
   return (
     <RegisterUI
-      errorText={authError|| ''}
+      errorText={authError || ''}
       email={registerEmail}
       setEmail={setRegisterEmail}
       userName={registerName}

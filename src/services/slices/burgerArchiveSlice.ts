@@ -18,14 +18,14 @@ export const getBurgerOrderByNumber = createAsyncThunk(
 type TBurgerOrdersState = {
   orders: TOrder[];
   currentOrder: TOrder | null;
-  loading: boolean;
+  isOrdersLoading: boolean;
   error: string | null;
 };
 
 const initialState: TBurgerOrdersState = {
   orders: [],
   currentOrder: null,
-  loading: false,
+  isOrdersLoading: false,
   error: null
 };
 
@@ -40,27 +40,27 @@ const burgerOrdersSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(getBurgerOrders.pending, (state) => {
-        state.loading = true;
+        state.isOrdersLoading = true;
         state.error = null;
       })
       .addCase(getBurgerOrders.fulfilled, (state, action) => {
-        state.loading = false;
+        state.isOrdersLoading = false;
         state.orders = action.payload;
       })
       .addCase(getBurgerOrders.rejected, (state, action) => {
-        state.loading = false;
+        state.isOrdersLoading = false;
         state.error = action.error.message || 'Ошибка загрузки заказов';
       })
       .addCase(getBurgerOrderByNumber.pending, (state) => {
-        state.loading = true;
+        state.isOrdersLoading = true;
         state.error = null;
       })
       .addCase(getBurgerOrderByNumber.fulfilled, (state, action) => {
-        state.loading = false;
+        state.isOrdersLoading = false;
         state.currentOrder = action.payload;
       })
       .addCase(getBurgerOrderByNumber.rejected, (state, action) => {
-        state.loading = false;
+        state.isOrdersLoading = false;
         state.error = action.error.message || 'Ошибка загрузки заказа';
       });
   }

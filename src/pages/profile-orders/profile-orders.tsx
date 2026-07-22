@@ -6,13 +6,13 @@ import { Preloader } from '@ui';
 
 export const ProfileOrders: FC = () => {
   const dispatch = useDispatch();
-  const { orders, loading } = useSelector((state) => state.orders);
+  const { orders, isOrdersLoading } = useSelector((state) => state.orders);
 
   useEffect(() => {
     dispatch(getBurgerOrders());
   }, [dispatch]);
 
-  if (loading) {
+  if (isOrdersLoading) {
     return <Preloader />;
   }
 

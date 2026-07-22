@@ -12,7 +12,7 @@ export const Login: FC = () => {
   const location = useLocation();
 
   const authError = useSelector((state) => state.user.authError);
-const isAuthLoading = useSelector((state) => state.user.isAuthLoading);
+  const isAuthLoading = useSelector((state) => state.user.isAuthLoading);
   const handleLoginSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
     dispatch(loginBurgerUser({ email: userEmail, password: userPassword }))
