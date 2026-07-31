@@ -9,3 +9,12 @@ dist
 /blob-report/
 /playwright/.cache/
 /playwright/.auth/
+node_modules/
+.idea/
+.vscode/
+test-results/
+playwright-report/
+dist/
+build/
+.env
+.env.local
