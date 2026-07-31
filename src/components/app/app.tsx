@@ -50,7 +50,7 @@ const App = () => {
       dispatch(authBurgerChecked());
     }
   }, [dispatch]);
-
+//загрузка
   const isLoading = useSelector((state) => state.ingredients.isLoading);
   const errorMessage = useSelector((state) => state.ingredients.error);
 
