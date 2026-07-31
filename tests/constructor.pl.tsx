@@ -113,7 +113,6 @@ test.describe('Конструктор бургера', () => {
         localStorage.removeItem('refreshToken');
       });
     } catch (e) {
-      // ignore
     }
   });
 });
