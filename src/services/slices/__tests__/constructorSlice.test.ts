@@ -48,24 +48,34 @@ describe('burgerConstructorSlice', () => {
   });
 
   it('должен добавить булку', () => {
-    const state = burgerConstructorReducer(initialState, addBurgerIngredient(mockBun));
-    expect(state.bun).toEqual(expect.objectContaining({
-      _id: '1',
-      name: 'Краторная булка',
-      type: 'bun'
-    }));
+    const state = burgerConstructorReducer(
+      initialState,
+      addBurgerIngredient(mockBun)
+    );
+    expect(state.bun).toEqual(
+      expect.objectContaining({
+        _id: '1',
+        name: 'Краторная булка',
+        type: 'bun'
+      })
+    );
     expect(state.ingredients).toHaveLength(0);
   });
 
   it('должен добавить начинку', () => {
-    const state = burgerConstructorReducer(initialState, addBurgerIngredient(mockIngredient));
+    const state = burgerConstructorReducer(
+      initialState,
+      addBurgerIngredient(mockIngredient)
+    );
     expect(state.bun).toBeNull();
     expect(state.ingredients).toHaveLength(1);
-    expect(state.ingredients[0]).toEqual(expect.objectContaining({
-      _id: '2',
-      name: 'Биокотлета',
-      type: 'main'
-    }));
+    expect(state.ingredients[0]).toEqual(
+      expect.objectContaining({
+        _id: '2',
+        name: 'Биокотлета',
+        type: 'main'
+      })
+    );
   });
 
   it('должен удалить начинку', () => {
@@ -73,7 +83,10 @@ describe('burgerConstructorSlice', () => {
       bun: null,
       ingredients: [{ ...mockIngredient, id: 'test-id-1' }]
     };
-    const state = burgerConstructorReducer(stateWithIngredient, removeBurgerIngredient(0));
+    const state = burgerConstructorReducer(
+      stateWithIngredient,
+      removeBurgerIngredient(0)
+    );
     expect(state.ingredients).toHaveLength(0);
   });
 
@@ -82,7 +95,10 @@ describe('burgerConstructorSlice', () => {
       bun: mockBun,
       ingredients: [{ ...mockIngredient, id: 'test-id-1' }]
     };
-    const state = burgerConstructorReducer(stateWithItems, clearBurgerConstructor());
+    const state = burgerConstructorReducer(
+      stateWithItems,
+      clearBurgerConstructor()
+    );
     expect(state.bun).toBeNull();
     expect(state.ingredients).toHaveLength(0);
   });

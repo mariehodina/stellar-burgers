@@ -1,5 +1,8 @@
 import { describe, it, expect } from '@jest/globals';
-import { burgerIngredientsReducer, fetchBurgerIngredients } from '../burgerIngredientsSlice';
+import {
+  burgerIngredientsReducer,
+  fetchBurgerIngredients
+} from '../burgerIngredientsSlice';
 
 const initialState = {
   ingredients: [],
@@ -14,14 +17,29 @@ describe('burgerIngredientsSlice', () => {
   });
 
   it('должен обработать fetchBurgerIngredients.pending', () => {
-    const state = burgerIngredientsReducer(initialState, fetchBurgerIngredients.pending('', undefined));
+    const state = burgerIngredientsReducer(
+      initialState,
+      fetchBurgerIngredients.pending('', undefined)
+    );
     expect(state.isLoading).toBe(true);
     expect(state.error).toBe(null);
   });
 
   it('должен обработать fetchBurgerIngredients.fulfilled', () => {
     const mockIngredients = [
-      { _id: '1', name: 'Булка', type: 'bun', price: 100, proteins: 10, fat: 5, carbohydrates: 20, calories: 150, image: '', image_large: '', image_mobile: '' }
+      {
+        _id: '1',
+        name: 'Булка',
+        type: 'bun',
+        price: 100,
+        proteins: 10,
+        fat: 5,
+        carbohydrates: 20,
+        calories: 150,
+        image: '',
+        image_large: '',
+        image_mobile: ''
+      }
     ];
     const state = burgerIngredientsReducer(
       { ...initialState, isLoading: true },
