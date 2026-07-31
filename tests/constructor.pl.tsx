@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 
 test.describe('Страница конструктора бургера', () => {
   test.beforeEach(async ({ page }) => {
-    await page.routeFromHAR('./tests/hars/ingredients.har', {
+    await page.routeFromHAR('./tests/hars/burgerIngredient.har', {
       url: '**/api/ingredients',
       update: false
     });
@@ -184,15 +184,15 @@ test.describe('Страница конструктора бургера', () => 
 
 test.describe('Создание заказа', () => {
   test.beforeEach(async ({ page }) => {
-    await page.routeFromHAR('tests/hars/ingredients.har', {
+    await page.routeFromHAR('tests/hars/burgerIngredient.har', {
       url: '**/api/ingredients',
       update: false
     });
-    await page.routeFromHAR('tests/hars/user.har', {
+    await page.routeFromHAR('tests/hars/burgerUsers.har', {
       url: '**/api/auth/user',
       update: false
     });
-    await page.routeFromHAR('tests/hars/order.har', {
+    await page.routeFromHAR('tests/hars/burgerOrder.har', {
       url: '**/api/orders',
       update: false
     });

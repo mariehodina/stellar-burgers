@@ -74,14 +74,16 @@ export const BurgerConstructor: FC = () => {
   );
 
   return (
-    <BurgerConstructorUI
-      price={totalPrice}
-      orderRequest={isOrderRequesting}
-      constructorItems={constructorItems}
-      orderModalData={orderDetailsData}
-      onOrderClick={handleOrderClick}
-      closeOrderModal={handleCloseOrderModal}
-      deleteIngredient={handleDeleteIngredient}
-    />
+    <div data-testid="burger-constructor">
+      <BurgerConstructorUI
+        price={totalPrice}
+        orderRequest={isOrderRequesting}
+        constructorItems={constructorItems}
+        orderModalData={orderDetailsData}
+        onOrderClick={handleOrderClick}
+        closeOrderModal={handleCloseOrderModal}
+        deleteIngredient={handleDeleteIngredient}
+      />
+    </div>
   );
 };

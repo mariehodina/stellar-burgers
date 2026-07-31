@@ -48,6 +48,7 @@ export const BurgerIngredients: FC = () => {
 
   return (
     <BurgerIngredientsUI
+    data-testid="burger-ingredients"
       currentTab={activeTab}
       buns={buns}
       mains={mains}

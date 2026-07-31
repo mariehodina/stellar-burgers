@@ -2,8 +2,7 @@ import { test, expect } from '@playwright/test';
 
 test.describe('Конструктор бургера', () => {
   test.beforeEach(async ({ page }) => {
-    // запросы к API
-    await page.routeFromHAR('./tests/hars/ingredients.har', {
+    await page.routeFromHAR('./tests/hars/burgerIngredient.har', {
       url: '**/api/ingredients',
       update: false
     });
@@ -12,11 +11,9 @@ test.describe('Конструктор бургера', () => {
   test('должен добавить ингредиент в конструктор', async ({ page }) => {
     await page.goto('/');
     
-    // нахожу ингредиент и добавляю его
     const ingredient = page.locator('[data-testid="ingredient-2"]');
     await ingredient.click();
     
-    // Проверка того, что ингредиент добавился в конструктор
     const constructorItems = page.locator('[data-testid="constructor-items"]');
     await expect(constructorItems).toBeVisible();
   });
@@ -47,7 +44,6 @@ test.describe('Конструктор бургера', () => {
   });
 
   test('должен создать заказ', async ({ page }) => {
-    // Добавка куки для авторизации
     await page.context().addCookies([
       {
         name: 'accessToken',
@@ -59,19 +55,15 @@ test.describe('Конструктор бургера', () => {
 
     await page.goto('/');
     
-    // добавка булки
     const bun = page.locator('[data-testid="ingredient-bun"]');
     await bun.click();
     
-    // добавка начинки
     const ingredient = page.locator('[data-testid="ingredient-main"]');
     await ingredient.click();
     
-    // нажатие на "Оформить заказ"
     const orderButton = page.locator('[data-testid="order-button"]');
     await orderButton.click();
     
-    // проверка того, что открылось модал окно заказа
     const orderModal = page.locator('[data-testid="order-modal"]');
     await expect(orderModal).toBeVisible();
   });

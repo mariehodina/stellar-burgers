@@ -81,6 +81,7 @@ export const BurgerConstructorUI: FC<BurgerConstructorUIProps> = ({
         <CurrencyIcon type='primary' />
       </div>
       <Button
+        data-testid="order-button"
         htmlType='button'
         type='primary'
         size='large'
