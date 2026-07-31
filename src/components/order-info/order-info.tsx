@@ -5,25 +5,23 @@ import { TIngredient, TOrder } from '@utils-types';
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from '../../services/store';
 import {
-  getOrderByNumber,
-  clearCurrentOrder
-} from '../../services/slices/ordersSlice';
+  getBurgerOrderByNumber,
+  clearBurgerCurrentOrder
+} from '../../services/slices/burgerArchiveSlice';
 
 export const OrderInfo: FC = () => {
   const { number } = useParams();
   const dispatch = useDispatch();
   const orderData = useSelector((state) => state.orders.currentOrder);
-
   const ingredients = useSelector((state) => state.ingredients.ingredients);
-
-  const loading = useSelector((state) => state.orders.loading);
+  const isOrdersLoading = useSelector((state) => state.orders.isOrdersLoading);
 
   useEffect(() => {
     if (number) {
-      dispatch(getOrderByNumber(Number(number)));
+      dispatch(getBurgerOrderByNumber(Number(number)));
     }
     return () => {
-      dispatch(clearCurrentOrder());
+      dispatch(clearBurgerCurrentOrder());
     };
   }, [dispatch, number]);
 
@@ -52,7 +50,6 @@ export const OrderInfo: FC = () => {
         } else {
           acc[item].count++;
         }
-
         return acc;
       },
       {}
@@ -75,7 +72,7 @@ export const OrderInfo: FC = () => {
     };
   }, [orderData, ingredients]);
 
-  if (!orderInfo) {
+  if (!orderInfo || isOrdersLoading) {
     return <Preloader />;
   }
 

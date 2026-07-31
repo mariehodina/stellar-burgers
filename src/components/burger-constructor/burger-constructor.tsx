@@ -4,78 +4,86 @@ import { BurgerConstructorUI } from '@ui';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from '../../services/store';
 import {
-  removeIngredient,
-  clearConstructor
-} from '../../services/slices/constructorSlice';
-import { createOrder, clearOrder } from '../../services/slices/orderSlice';
+  removeBurgerIngredient,
+  clearBurgerConstructor
+} from '../../services/slices/burgerConstructorSlice';
+import {
+  createBurgerOrder,
+  clearBurgerOrder
+} from '../../services/slices/burgerOrderSlice';
 
 export const BurgerConstructor: FC = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const bun = useSelector(
+  const currentBun = useSelector(
     (state) => state.burgerConstructor?.bun as TConstructorIngredient | null
   );
-  const ingredients = useSelector(
+  const currentIngredients = useSelector(
     (state) => state.burgerConstructor?.ingredients || []
   );
 
   const constructorItems = {
-    bun: bun,
-    ingredients: ingredients
+    bun: currentBun,
+    ingredients: currentIngredients
   };
 
-  const orderRequest = useSelector((state) => state.order.orderRequest);
-  const orderModalData = useSelector((state) => state.order.orderModalData);
-  const user = useSelector((state) => state.user.user);
+  const isOrderRequesting = useSelector((state) => state.order.orderRequest);
+  const orderDetailsData = useSelector((state) => state.order.orderModalData);
+  const currentUser = useSelector((state) => state.user.user);
 
-  const onOrderClick = () => {
-    if (!constructorItems.bun || orderRequest) return;
+  const handleOrderClick = () => {
+    if (!constructorItems.bun || isOrderRequesting) return;
 
-    if (!user) {
+    if (!currentUser) {
       navigate('/login');
       return;
     }
 
     const ingredientsIds = [
       constructorItems.bun._id,
-      ...constructorItems.ingredients.map((i: TConstructorIngredient) => i._id),
+      ...constructorItems.ingredients.map(
+        (item: TConstructorIngredient) => item._id
+      ),
       constructorItems.bun._id
     ];
-    dispatch(createOrder(ingredientsIds))
+
+    dispatch(createBurgerOrder(ingredientsIds))
       .unwrap()
       .then(() => {
-        dispatch(clearConstructor());
+        dispatch(clearBurgerConstructor());
       });
   };
 
-  const closeOrderModal = () => {
-    dispatch(clearOrder());
+  const handleCloseOrderModal = () => {
+    dispatch(clearBurgerOrder());
   };
 
-  const onDeleteIngredient = (index: number) => {
-    dispatch(removeIngredient(index));
+  const handleDeleteIngredient = (index: number) => {
+    dispatch(removeBurgerIngredient(index));
   };
 
-  const price = useMemo(
+  const totalPrice = useMemo(
     () =>
       (constructorItems.bun ? constructorItems.bun.price * 2 : 0) +
       constructorItems.ingredients.reduce(
         (sum: number, item: TConstructorIngredient) => sum + item.price,
         0
       ),
-    [constructorItems]
+    [currentBun, currentIngredients]
   );
 
   return (
-    <BurgerConstructorUI
-      price={price}
-      orderRequest={orderRequest}
-      constructorItems={constructorItems}
-      orderModalData={orderModalData}
-      onOrderClick={onOrderClick}
-      closeOrderModal={closeOrderModal}
-      onDeleteIngredient={onDeleteIngredient}
-    />
+    <div data-testid="burger-constructor">
+      <BurgerConstructorUI
+        price={totalPrice}
+        orderRequest={isOrderRequesting}
+        constructorItems={constructorItems}
+        orderModalData={orderDetailsData}
+        onOrderClick={handleOrderClick}
+        closeOrderModal={handleCloseOrderModal}
+        deleteIngredient={handleDeleteIngredient}
+      />
+    </div>
   );
 };
