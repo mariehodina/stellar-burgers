@@ -21,21 +21,12 @@ export const ProtectedRoute: FC<TProtectedRouteProps> = ({
   }
 
   if (!onlyUnAuth && !user) {
-<<<<<<< HEAD
     return <Navigate to='/login' state={{ from: location }} replace />;
   }
 
   if (onlyUnAuth && user) {
     const from = location.state?.from || '/';
     return <Navigate to={from} replace />;
-=======
-    return <Navigate to='/login' state={{ from: location }} />;
-  }
-
-  if (onlyUnAuth && user) {
-    const { from } = location.state || { from: { pathname: '/' } };
-    return <Navigate to={from} />;
->>>>>>> 5613f3f6626cc344f1142a6387d582e391da6776
   }
 
   return children;

@@ -5,21 +5,14 @@ import { TIngredient, TOrder } from '@utils-types';
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from '../../services/store';
 import {
-<<<<<<< HEAD
   getBurgerOrderByNumber,
   clearBurgerCurrentOrder
 } from '../../services/slices/burgerArchiveSlice';
-=======
-  getOrderByNumber,
-  clearCurrentOrder
-} from '../../services/slices/ordersSlice';
->>>>>>> 5613f3f6626cc344f1142a6387d582e391da6776
 
 export const OrderInfo: FC = () => {
   const { number } = useParams();
   const dispatch = useDispatch();
   const orderData = useSelector((state) => state.orders.currentOrder);
-<<<<<<< HEAD
   const ingredients = useSelector((state) => state.ingredients.ingredients);
   const isOrdersLoading = useSelector((state) => state.orders.isOrdersLoading);
 
@@ -29,19 +22,6 @@ export const OrderInfo: FC = () => {
     }
     return () => {
       dispatch(clearBurgerCurrentOrder());
-=======
-
-  const ingredients = useSelector((state) => state.ingredients.ingredients);
-
-  const loading = useSelector((state) => state.orders.loading);
-
-  useEffect(() => {
-    if (number) {
-      dispatch(getOrderByNumber(Number(number)));
-    }
-    return () => {
-      dispatch(clearCurrentOrder());
->>>>>>> 5613f3f6626cc344f1142a6387d582e391da6776
     };
   }, [dispatch, number]);
 
@@ -93,7 +73,6 @@ export const OrderInfo: FC = () => {
   }, [orderData, ingredients]);
 
   if (!orderInfo || isOrdersLoading) {
-    // ← исправлено
     return <Preloader />;
   }
 

@@ -17,11 +17,7 @@ export const BurgerConstructorUI: FC<BurgerConstructorUIProps> = ({
   orderModalData,
   onOrderClick,
   closeOrderModal,
-<<<<<<< HEAD
   deleteIngredient
-=======
-  onDeleteIngredient
->>>>>>> 5613f3f6626cc344f1142a6387d582e391da6776
 }) => (
   <section className={styles.burger_constructor}>
     {constructorItems.bun ? (
@@ -50,11 +46,7 @@ export const BurgerConstructorUI: FC<BurgerConstructorUIProps> = ({
               index={index}
               totalItems={constructorItems.ingredients.length}
               key={item.id}
-<<<<<<< HEAD
               delete={deleteIngredient}
-=======
-              onDelete={onDeleteIngredient}
->>>>>>> 5613f3f6626cc344f1142a6387d582e391da6776
             />
           )
         )
