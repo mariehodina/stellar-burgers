@@ -5,7 +5,8 @@ import { BurgerIngredientsUI } from '../ui/burger-ingredients';
 import { useSelector } from '../../services/store';
 
 export const BurgerIngredients: FC = () => {
-  const ingredientsList = useSelector((state) => state.ingredients.ingredients);
+  const ingredientsList = useSelector((state) => state.burgerIngredients.ingredients);
+  
   const buns = useMemo(
     () => ingredientsList.filter((item: TIngredient) => item.type === 'bun'),
     [ingredientsList]
@@ -18,10 +19,12 @@ export const BurgerIngredients: FC = () => {
     () => ingredientsList.filter((item: TIngredient) => item.type === 'sauce'),
     [ingredientsList]
   );
+  
   const [activeTab, setActiveTab] = useState<TTabMode>('bun');
   const bunTitleRef = useRef<HTMLHeadingElement>(null);
   const mainTitleRef = useRef<HTMLHeadingElement>(null);
   const saucesTitleRef = useRef<HTMLHeadingElement>(null);
+  
   const [bunsRef, isBunsVisible] = useInView({ threshold: 0 });
   const [mainsRef, isMainsVisible] = useInView({ threshold: 0 });
   const [saucesRef, isSaucesVisible] = useInView({ threshold: 0 });
@@ -38,17 +41,18 @@ export const BurgerIngredients: FC = () => {
 
   const handleTabClick = (tab: string) => {
     setActiveTab(tab as TTabMode);
-    if (tab === 'bun')
+    if (tab === 'bun') {
       bunTitleRef.current?.scrollIntoView({ behavior: 'smooth' });
-    if (tab === 'main')
+    } else if (tab === 'main') {
       mainTitleRef.current?.scrollIntoView({ behavior: 'smooth' });
-    if (tab === 'sauce')
+    } else if (tab === 'sauce') {
       saucesTitleRef.current?.scrollIntoView({ behavior: 'smooth' });
+    }
   };
 
   return (
     <BurgerIngredientsUI
-    data-testid="burger-ingredients"
+      data-testid="burger-ingredients"
       currentTab={activeTab}
       buns={buns}
       mains={mains}

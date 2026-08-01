@@ -12,8 +12,8 @@ export const ProtectedRoute: FC<TProtectedRouteProps> = ({
   onlyUnAuth = false,
   children
 }) => {
-  const isAuthChecked = useSelector((state) => state.user.isAuthChecked);
-  const user = useSelector((state) => state.user.user);
+  const isAuthChecked = useSelector((state) => state.burgerUser.isAuthChecked);
+  const user = useSelector((state) => state.burgerUser.user);
   const location = useLocation();
 
   if (!isAuthChecked) {

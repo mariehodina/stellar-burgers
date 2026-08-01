@@ -6,15 +6,16 @@ import { fetchBurgerFeeds } from '../../services/slices/burgerFeedSlice';
 
 export const Feed: FC = () => {
   const dispatch = useDispatch();
-  const orders = useSelector((state) => state.feed.orders);
+  const { orders, isLoading } = useSelector((state) => state.burgerFeed);
 
   useEffect(() => {
     dispatch(fetchBurgerFeeds());
   }, [dispatch]);
 
-  if (!orders.length) {
+  if (isLoading || !orders.length) {
     return <Preloader />;
   }
+
   return (
     <FeedUI
       orders={orders}

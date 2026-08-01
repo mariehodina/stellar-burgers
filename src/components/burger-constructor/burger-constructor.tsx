@@ -28,9 +28,9 @@ export const BurgerConstructor: FC = () => {
     ingredients: currentIngredients
   };
 
-  const isOrderRequesting = useSelector((state) => state.order.orderRequest);
-  const orderDetailsData = useSelector((state) => state.order.orderModalData);
-  const currentUser = useSelector((state) => state.user.user);
+  const isOrderRequesting = useSelector((state) => state.burgerOrder.orderRequest);
+  const orderDetailsData = useSelector((state) => state.burgerOrder.orderModalData);
+  const currentUser = useSelector((state) => state.burgerUser.user);
 
   const handleOrderClick = () => {
     if (!constructorItems.bun || isOrderRequesting) return;

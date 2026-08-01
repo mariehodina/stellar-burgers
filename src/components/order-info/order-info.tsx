@@ -12,9 +12,9 @@ import {
 export const OrderInfo: FC = () => {
   const { number } = useParams();
   const dispatch = useDispatch();
-  const orderData = useSelector((state) => state.orders.currentOrder);
-  const ingredients = useSelector((state) => state.ingredients.ingredients);
-  const isOrdersLoading = useSelector((state) => state.orders.isOrdersLoading);
+  const orderData = useSelector((state) => state.burgerOrders.currentOrder);
+  const ingredients = useSelector((state) => state.burgerIngredients.ingredients);
+  const isOrdersLoading = useSelector((state) => state.burgerOrders.isOrdersLoading);
 
   useEffect(() => {
     if (number) {

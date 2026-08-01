@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from '../../services/store';
 import { updateBurgerUserData } from '../../services/slices/burgerUserSlice';
 
 export const Profile: FC = () => {
-  const currentUser = useSelector((state) => state.user.user);
+  const currentUser = useSelector((state) => state.burgerUser.user);
   const dispatch = useDispatch();
 
   const [profileForm, setProfileForm] = useState({

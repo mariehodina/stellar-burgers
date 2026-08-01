@@ -11,8 +11,9 @@ export const Login: FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const authError = useSelector((state) => state.user.authError);
-  const isAuthLoading = useSelector((state) => state.user.isAuthLoading);
+  const authError = useSelector((state) => state.burgerUser.authError);
+  const isAuthLoading = useSelector((state) => state.burgerUser.isAuthLoading);
+
   const handleLoginSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
     dispatch(loginBurgerUser({ email: userEmail, password: userPassword }))
@@ -21,7 +22,9 @@ export const Login: FC = () => {
         const from = location.state?.from?.pathname || '/';
         navigate(from, { replace: true });
       })
-      .catch(() => {});
+      .catch((err) => {
+        console.log('Ошибка входа:', err);
+      });
   };
 
   return (

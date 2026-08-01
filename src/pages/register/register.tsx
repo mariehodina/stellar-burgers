@@ -11,8 +11,8 @@ export const Register: FC = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const authError = useSelector((state) => state.user.authError);
-  const isAuthLoading = useSelector((state) => state.user.isAuthLoading);
+  const authError = useSelector((state) => state.burgerUser.authError);
+  const isAuthLoading = useSelector((state) => state.burgerUser.isAuthLoading);
 
   const handleRegisterSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
@@ -27,7 +27,9 @@ export const Register: FC = () => {
       .then(() => {
         navigate('/', { replace: true });
       })
-      .catch(() => {});
+      .catch((err) => {
+        console.log('Ошибка регистрации:', err);
+      });
   };
 
   return (
@@ -43,4 +45,3 @@ export const Register: FC = () => {
     />
   );
 };
-
