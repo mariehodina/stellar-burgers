@@ -28,8 +28,12 @@ export const BurgerConstructor: FC = () => {
     ingredients: currentIngredients
   };
 
-  const isOrderRequesting = useSelector((state) => state.burgerOrder.orderRequest);
-  const orderDetailsData = useSelector((state) => state.burgerOrder.orderModalData);
+  const isOrderRequesting = useSelector(
+    (state) => state.burgerOrder.orderRequest
+  );
+  const orderDetailsData = useSelector(
+    (state) => state.burgerOrder.orderModalData
+  );
   const currentUser = useSelector((state) => state.burgerUser.user);
 
   const handleOrderClick = () => {
@@ -74,7 +78,7 @@ export const BurgerConstructor: FC = () => {
   );
 
   return (
-    <div data-testid="burger-constructor">
+    <div data-testid='burger-constructor'>
       <BurgerConstructorUI
         price={totalPrice}
         orderRequest={isOrderRequesting}
