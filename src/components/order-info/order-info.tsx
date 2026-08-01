@@ -13,8 +13,12 @@ export const OrderInfo: FC = () => {
   const { number } = useParams();
   const dispatch = useDispatch();
   const orderData = useSelector((state) => state.burgerOrders.currentOrder);
-  const ingredients = useSelector((state) => state.burgerIngredients.ingredients);
-  const isOrdersLoading = useSelector((state) => state.burgerOrders.isOrdersLoading);
+  const ingredients = useSelector(
+    (state) => state.burgerIngredients.ingredients
+  );
+  const isOrdersLoading = useSelector(
+    (state) => state.burgerOrders.isOrdersLoading
+  );
 
   useEffect(() => {
     if (number) {

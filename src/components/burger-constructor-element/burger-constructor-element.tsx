@@ -11,17 +11,16 @@ export const BurgerConstructorElement: FC<BurgerConstructorElementProps> = memo(
       }
     };
     return (
-  <li data-testid="constructor-item">
-    <BurgerConstructorElementUI
-      ingredient={ingredient}
-      index={index}
-      totalItems={totalItems}
-      handleMoveUp={handleMoveUp}
-      handleMoveDown={handleMoveDown}
-      handleClose={handleClose}
-    />
-  </li>
-);
+      <li data-testid='constructor-item'>
+        <BurgerConstructorElementUI
+          ingredient={ingredient}
+          index={index}
+          totalItems={totalItems}
+          handleMoveUp={handleMoveUp}
+          handleMoveDown={handleMoveDown}
+          handleClose={handleClose}
+        />
+      </li>
+    );
   }
 );
-

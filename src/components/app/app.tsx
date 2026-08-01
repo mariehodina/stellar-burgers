@@ -50,10 +50,9 @@ const App = () => {
       dispatch(authBurgerChecked());
     }
   }, [dispatch]);
-//загрузка
-  const isLoading = useSelector((state) => state.ingredients.isLoading);
-  const errorMessage = useSelector((state) => state.ingredients.error);
-
+  //загрузка
+  const isLoading = useSelector((state) => state.burgerIngredients.isLoading);
+  const errorMessage = useSelector((state) => state.burgerIngredients.error);
   const handleModalClose = useCallback(() => {
     navigate(-1);
   }, [navigate]);

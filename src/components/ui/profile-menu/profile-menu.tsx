@@ -27,7 +27,6 @@ export const ProfileMenuUI: FC<ProfileMenuUIProps> = ({
         } ${isActive ? styles.link_active : ''}`
       }
     >
-  
       История заказов
     </NavLink>
     <button
