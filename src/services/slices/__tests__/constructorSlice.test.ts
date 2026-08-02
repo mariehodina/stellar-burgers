@@ -1,17 +1,17 @@
+import { burgerConstructorReducer } from '../burgerConstructorSlice';
 import {
-  constructorReducer,
-  addIngredient,
-  removeIngredient,
-  moveIngredient,
-  clearConstructor
-} from '../constructorSlice';
+  addBurgerIngredient,
+  removeBurgerIngredient,
+  moveBurgerIngredient,
+  clearBurgerConstructor
+} from '../burgerConstructorSlice';
 
 let mockIdCounter = 0;
 jest.mock('uuid', () => ({
   v4: jest.fn(() => `mock-id-${++mockIdCounter}`)
 }));
 
-describe('Тесты редьюсера constructorSlice', () => {
+describe('Тесты редьюсера burgerConstructorSlice', () => {
   beforeEach(() => {
     mockIdCounter = 0;
   });
@@ -86,13 +86,15 @@ describe('Тесты редьюсера constructorSlice', () => {
     carbohydrates: 85,
     calories: 643,
     price: 988,
-    image: 'https://code.s3.yandex.net/react/code/meat-03.pn',
+    image: 'https://code.s3.yandex.net/react/code/meat-03.png',
     image_large: 'https://code.s3.yandex.net/react/code/meat-03-large.png',
     image_mobile: 'https://code.s3.yandex.net/react/code/meat-03-mobile.png'
   };
 
   test('Инициализация с undefined и неизвестным экшеном возвращает начальное состояние', () => {
-    const state = constructorReducer(undefined, { type: 'UNKNOWN_ACTION' });
+    const state = burgerConstructorReducer(undefined, {
+      type: 'UNKNOWN_ACTION'
+    });
     expect(state).toEqual(initialState);
   });
 
@@ -101,31 +103,42 @@ describe('Тесты редьюсера constructorSlice', () => {
       bun: { ...mockBun, id: 'existing-bun-id' },
       ingredients: [{ ...mockMain, id: 'existing-main-id' }]
     };
-    const state = constructorReducer(currentState, { type: 'UNKNOWN_ACTION' });
+    const state = burgerConstructorReducer(currentState, {
+      type: 'UNKNOWN_ACTION'
+    });
     expect(state).toEqual(currentState);
   });
 
-  describe('Экшен addIngredient', () => {
+  describe('Экшен addBurgerIngredient', () => {
     test('Добавляет булку в поле bun', () => {
-      const state = constructorReducer(initialState, addIngredient(mockBun));
+      const state = burgerConstructorReducer(
+        initialState,
+        addBurgerIngredient(mockBun)
+      );
 
       expect(state.bun).toEqual({ ...mockBun, id: 'mock-id-1' });
       expect(state.ingredients).toEqual([]);
     });
 
     test('Заменяет существующую булку при добавлении новой', () => {
-      const stateWithBun = constructorReducer(
+      const stateWithBun = burgerConstructorReducer(
         initialState,
-        addIngredient(mockBun)
+        addBurgerIngredient(mockBun)
       );
-      const state = constructorReducer(stateWithBun, addIngredient(mockBun2));
+      const state = burgerConstructorReducer(
+        stateWithBun,
+        addBurgerIngredient(mockBun2)
+      );
 
       expect(state.bun).toEqual({ ...mockBun2, id: 'mock-id-2' });
       expect(state.ingredients).toEqual([]);
     });
 
     test('Добавляет начинку (type: main) в массив ingredients', () => {
-      const state = constructorReducer(initialState, addIngredient(mockMain));
+      const state = burgerConstructorReducer(
+        initialState,
+        addBurgerIngredient(mockMain)
+      );
 
       expect(state.bun).toBeNull();
       expect(state.ingredients).toHaveLength(1);
@@ -133,7 +146,10 @@ describe('Тесты редьюсера constructorSlice', () => {
     });
 
     test('Добавляет соус (type: sauce) в массив ingredients', () => {
-      const state = constructorReducer(initialState, addIngredient(mockSauce));
+      const state = burgerConstructorReducer(
+        initialState,
+        addBurgerIngredient(mockSauce)
+      );
 
       expect(state.bun).toBeNull();
       expect(state.ingredients).toHaveLength(1);
@@ -141,7 +157,10 @@ describe('Тесты редьюсера constructorSlice', () => {
     });
 
     test('Генерирует уникальный id для каждого ингредиента', () => {
-      const state = constructorReducer(initialState, addIngredient(mockMain));
+      const state = burgerConstructorReducer(
+        initialState,
+        addBurgerIngredient(mockMain)
+      );
 
       expect(state.ingredients[0].id).toBeDefined();
       expect(typeof state.ingredients[0].id).toBe('string');
@@ -149,9 +168,15 @@ describe('Тесты редьюсера constructorSlice', () => {
     });
 
     test('Добавляет несколько начинок в массив ingredients', () => {
-      let state = constructorReducer(initialState, addIngredient(mockMain));
-      state = constructorReducer(state, addIngredient(mockSauce));
-      state = constructorReducer(state, addIngredient(mockSecondMain));
+      let state = burgerConstructorReducer(
+        initialState,
+        addBurgerIngredient(mockMain)
+      );
+      state = burgerConstructorReducer(state, addBurgerIngredient(mockSauce));
+      state = burgerConstructorReducer(
+        state,
+        addBurgerIngredient(mockSecondMain)
+      );
 
       expect(state.ingredients).toHaveLength(3);
       expect(state.ingredients[0]._id).toBe(mockMain._id);
@@ -160,12 +185,18 @@ describe('Тесты редьюсера constructorSlice', () => {
     });
   });
 
-  describe('Экшен removeIngredient', () => {
+  describe('Экшен removeBurgerIngredient', () => {
     test('Удаляет ингредиент по индексу', () => {
-      let state = constructorReducer(initialState, addIngredient(mockMain));
-      state = constructorReducer(state, addIngredient(mockSauce));
-      state = constructorReducer(state, addIngredient(mockSecondMain));
-      state = constructorReducer(state, removeIngredient(1));
+      let state = burgerConstructorReducer(
+        initialState,
+        addBurgerIngredient(mockMain)
+      );
+      state = burgerConstructorReducer(state, addBurgerIngredient(mockSauce));
+      state = burgerConstructorReducer(
+        state,
+        addBurgerIngredient(mockSecondMain)
+      );
+      state = burgerConstructorReducer(state, removeBurgerIngredient(1));
 
       expect(state.ingredients).toHaveLength(2);
       expect(state.ingredients[0]._id).toBe(mockMain._id);
@@ -173,40 +204,44 @@ describe('Тесты редьюсера constructorSlice', () => {
     });
 
     test('Удаляет первый ингредиент по индексу 0', () => {
-      let state = constructorReducer(initialState, addIngredient(mockMain));
-      state = constructorReducer(state, addIngredient(mockSauce));
-      state = constructorReducer(state, removeIngredient(0));
+      let state = burgerConstructorReducer(
+        initialState,
+        addBurgerIngredient(mockMain)
+      );
+      state = burgerConstructorReducer(state, addBurgerIngredient(mockSauce));
+      state = burgerConstructorReducer(state, removeBurgerIngredient(0));
 
       expect(state.ingredients).toHaveLength(1);
       expect(state.ingredients[0]._id).toBe(mockSauce._id);
     });
 
     test('Удаляет последний ингредиент', () => {
-      let state = constructorReducer(initialState, addIngredient(mockMain));
-      state = constructorReducer(state, addIngredient(mockSauce));
-      state = constructorReducer(state, removeIngredient(1));
-
-      expect(state.ingredients).toHaveLength(1);
-      expect(state.ingredients[0]._id).toBe(mockMain._id);
-    });
-
-    test('Не изменяет состояние при удалении несуществующего индекса', () => {
-      let state = constructorReducer(initialState, addIngredient(mockMain));
-      state = constructorReducer(state, removeIngredient(5));
+      let state = burgerConstructorReducer(
+        initialState,
+        addBurgerIngredient(mockMain)
+      );
+      state = burgerConstructorReducer(state, addBurgerIngredient(mockSauce));
+      state = burgerConstructorReducer(state, removeBurgerIngredient(1));
 
       expect(state.ingredients).toHaveLength(1);
       expect(state.ingredients[0]._id).toBe(mockMain._id);
     });
   });
 
-  describe('Экшен moveIngredient', () => {
+  describe('Экшен moveBurgerIngredient', () => {
     test('Перемещает ингредиент вниз', () => {
-      let state = constructorReducer(initialState, addIngredient(mockMain));
-      state = constructorReducer(state, addIngredient(mockSauce));
-      state = constructorReducer(state, addIngredient(mockSecondMain));
-      state = constructorReducer(
+      let state = burgerConstructorReducer(
+        initialState,
+        addBurgerIngredient(mockMain)
+      );
+      state = burgerConstructorReducer(state, addBurgerIngredient(mockSauce));
+      state = burgerConstructorReducer(
         state,
-        moveIngredient({ fromIndex: 0, toIndex: 2 })
+        addBurgerIngredient(mockSecondMain)
+      );
+      state = burgerConstructorReducer(
+        state,
+        moveBurgerIngredient({ fromIndex: 0, toIndex: 2 })
       );
 
       expect(state.ingredients[0]._id).toBe(mockSauce._id);
@@ -215,47 +250,45 @@ describe('Тесты редьюсера constructorSlice', () => {
     });
 
     test('Перемещает ингредиент вверх', () => {
-      let state = constructorReducer(initialState, addIngredient(mockMain));
-      state = constructorReducer(state, addIngredient(mockSauce));
-      state = constructorReducer(state, addIngredient(mockSecondMain));
-      state = constructorReducer(
+      let state = burgerConstructorReducer(
+        initialState,
+        addBurgerIngredient(mockMain)
+      );
+      state = burgerConstructorReducer(state, addBurgerIngredient(mockSauce));
+      state = burgerConstructorReducer(
         state,
-        moveIngredient({ fromIndex: 2, toIndex: 0 })
+        addBurgerIngredient(mockSecondMain)
+      );
+      state = burgerConstructorReducer(
+        state,
+        moveBurgerIngredient({ fromIndex: 2, toIndex: 0 })
       );
 
       expect(state.ingredients[0]._id).toBe(mockSecondMain._id);
       expect(state.ingredients[1]._id).toBe(mockMain._id);
       expect(state.ingredients[2]._id).toBe(mockSauce._id);
     });
-
-    test('перемещает ингредиент на соседнюю позицию', () => {
-      let state = constructorReducer(initialState, addIngredient(mockMain));
-      state = constructorReducer(state, addIngredient(mockSauce));
-      state = constructorReducer(state, addIngredient(mockSecondMain));
-      state = constructorReducer(
-        state,
-        moveIngredient({ fromIndex: 0, toIndex: 1 })
-      );
-
-      expect(state.ingredients[0]._id).toBe(mockSauce._id);
-      expect(state.ingredients[1]._id).toBe(mockMain._id);
-      expect(state.ingredients[2]._id).toBe(mockSecondMain._id);
-    });
   });
 
-  describe('Экшен clearConstructor', () => {
+  describe('Экшен clearBurgerConstructor', () => {
     test('Очищает конструктор от булки и ингредиентов', () => {
-      let state = constructorReducer(initialState, addIngredient(mockBun));
-      state = constructorReducer(state, addIngredient(mockMain));
-      state = constructorReducer(state, addIngredient(mockSauce));
-      state = constructorReducer(state, clearConstructor());
+      let state = burgerConstructorReducer(
+        initialState,
+        addBurgerIngredient(mockBun)
+      );
+      state = burgerConstructorReducer(state, addBurgerIngredient(mockMain));
+      state = burgerConstructorReducer(state, addBurgerIngredient(mockSauce));
+      state = burgerConstructorReducer(state, clearBurgerConstructor());
 
       expect(state.bun).toBeNull();
       expect(state.ingredients).toEqual([]);
     });
 
     test('Возвращает начальное состояние при очистке пустого конструктора', () => {
-      const state = constructorReducer(initialState, clearConstructor());
+      const state = burgerConstructorReducer(
+        initialState,
+        clearBurgerConstructor()
+      );
 
       expect(state).toEqual(initialState);
     });

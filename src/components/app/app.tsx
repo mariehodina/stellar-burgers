@@ -57,13 +57,14 @@ const App = () => {
     navigate(-1);
   }, [navigate]);
 
-  const OrderModalContent = useMemo(() => {
-    return (
+  const OrderModalContent = useMemo(
+    () => (
       <Modal onClose={handleModalClose} title={`#${orderNumber}`}>
         <OrderInfo />
       </Modal>
-    );
-  }, [handleModalClose, orderNumber]);
+    ),
+    [handleModalClose, orderNumber]
+  );
 
   return (
     <div className={styles.app}>

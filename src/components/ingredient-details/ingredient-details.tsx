@@ -7,7 +7,9 @@ import { TIngredient } from '@utils-types';
 
 export const IngredientDetails: FC = () => {
   const { id } = useParams();
-  const ingredients = useSelector((state) => state.burgerIngredients.ingredients);
+  const ingredients = useSelector(
+    (state) => state.burgerIngredients.ingredients
+  );
   const ingredient = ingredients.find((item: TIngredient) => item._id === id);
 
   if (!ingredient) {

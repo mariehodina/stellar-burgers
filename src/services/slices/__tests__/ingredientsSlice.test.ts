@@ -1,9 +1,12 @@
-import { ingredientsReducer, getIngredients } from '../ingredientsSlice';
+import {
+  burgerIngredientsReducer,
+  fetchBurgerIngredients
+} from '../burgerIngredientsSlice';
 
-describe('Тесты редьюсера ingredientsSlice', () => {
+describe('Тесты редьюсера burgerIngredientsSlice', () => {
   const initialState = {
     ingredients: [],
-    loading: false,
+    isLoading: false,
     error: null
   };
 
@@ -39,87 +42,91 @@ describe('Тесты редьюсера ingredientsSlice', () => {
   ];
 
   test('Инициализация с undefined и неизвестным экшеном возвращает начальное состояние', () => {
-    const state = ingredientsReducer(undefined, { type: 'UNKNOWN_ACTION' });
+    const state = burgerIngredientsReducer(undefined, {
+      type: 'UNKNOWN_ACTION'
+    });
     expect(state).toEqual(initialState);
   });
 
   test('При неизвестном экшене возвращается текущее состояние', () => {
     const currentState = {
       ingredients: mockIngredients,
-      loading: false,
+      isLoading: false,
       error: null
     };
-    const state = ingredientsReducer(currentState, { type: 'UNKNOWN_ACTION' });
+    const state = burgerIngredientsReducer(currentState, {
+      type: 'UNKNOWN_ACTION'
+    });
     expect(state).toEqual(currentState);
   });
 
-  test('getIngredients.pending устанавливает loading в true и сбрасывает ошибку', () => {
-    const action = { type: getIngredients.pending.type };
-    const state = ingredientsReducer(initialState, action);
+  test('fetchBurgerIngredients.pending устанавливает isLoading в true и сбрасывает ошибку', () => {
+    const action = { type: fetchBurgerIngredients.pending.type };
+    const state = burgerIngredientsReducer(initialState, action);
 
-    expect(state.loading).toBe(true);
+    expect(state.isLoading).toBe(true);
     expect(state.error).toBeNull();
     expect(state.ingredients).toEqual([]);
   });
 
-  test('getIngredients.fulfilled загружает ингредиенты и сбрасывает loading', () => {
+  test('fetchBurgerIngredients.fulfilled загружает ингредиенты и сбрасывает isLoading', () => {
     const action = {
-      type: getIngredients.fulfilled.type,
+      type: fetchBurgerIngredients.fulfilled.type,
       payload: mockIngredients
     };
-    const state = ingredientsReducer(
-      { ...initialState, loading: true },
+    const state = burgerIngredientsReducer(
+      { ...initialState, isLoading: true },
       action
     );
 
-    expect(state.loading).toBe(false);
+    expect(state.isLoading).toBe(false);
     expect(state.error).toBeNull();
     expect(state.ingredients).toEqual(mockIngredients);
     expect(state.ingredients).toHaveLength(2);
   });
 
-  test('getIngredients.fulfilled обрабатывает пустой массив', () => {
+  test('fetchBurgerIngredients.fulfilled обрабатывает пустой массив', () => {
     const action = {
-      type: getIngredients.fulfilled.type,
+      type: fetchBurgerIngredients.fulfilled.type,
       payload: []
     };
-    const state = ingredientsReducer(
-      { ...initialState, loading: true },
+    const state = burgerIngredientsReducer(
+      { ...initialState, isLoading: true },
       action
     );
 
-    expect(state.loading).toBe(false);
+    expect(state.isLoading).toBe(false);
     expect(state.error).toBeNull();
     expect(state.ingredients).toEqual([]);
   });
 
-  test('getIngredients.rejected устанавливает ошибку и сбрасывает loading', () => {
+  test('fetchBurgerIngredients.rejected устанавливает ошибку и сбрасывает isLoading', () => {
     const errorMessage = 'Network error';
     const action = {
-      type: getIngredients.rejected.type,
+      type: fetchBurgerIngredients.rejected.type,
       error: { message: errorMessage }
     };
-    const state = ingredientsReducer(
-      { ...initialState, loading: true },
+    const state = burgerIngredientsReducer(
+      { ...initialState, isLoading: true },
       action
     );
 
-    expect(state.loading).toBe(false);
+    expect(state.isLoading).toBe(false);
     expect(state.error).toBe(errorMessage);
     expect(state.ingredients).toEqual([]);
   });
 
-  test('getIngredients.rejected использует дефолтное сообщение, если message отсутствует', () => {
+  test('fetchBurgerIngredients.rejected использует дефолтное сообщение, если message отсутствует', () => {
     const action = {
-      type: getIngredients.rejected.type,
+      type: fetchBurgerIngredients.rejected.type,
       error: {}
     };
-    const state = ingredientsReducer(
-      { ...initialState, loading: true },
+    const state = burgerIngredientsReducer(
+      { ...initialState, isLoading: true },
       action
     );
 
-    expect(state.loading).toBe(false);
+    expect(state.isLoading).toBe(false);
     expect(state.error).toBe('Ошибка загрузки ингредиентов');
     expect(state.ingredients).toEqual([]);
   });
