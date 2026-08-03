@@ -4,7 +4,7 @@ import { useSelector } from '../../services/store';
 import { useLocation } from 'react-router-dom';
 
 export const AppHeader: FC = () => {
-  const user = useSelector((state) => state.user.user);
+  const user = useSelector((state) => state.burgerUser.user);
   const location = useLocation();
 
   return <AppHeaderUI userName={user?.name || ''} location={location} />;

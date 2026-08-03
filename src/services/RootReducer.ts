@@ -1,16 +1,16 @@
 import { combineReducers } from '@reduxjs/toolkit';
-import { ingredientsReducer } from './slices/ingredientsSlice';
-import { userReducer } from './slices/userSlice';
-import { constructorReducer } from './slices/constructorSlice';
-import { orderReducer } from './slices/orderSlice';
-import { feedReducer } from './slices/feedSlice';
-import { ordersReducer } from './slices/ordersSlice';
+import { burgerIngredientsReducer } from './slices/burgerIngredientsSlice';
+import { burgerUserReducer } from './slices/burgerUserSlice';
+import { burgerConstructorReducer } from './slices/burgerConstructorSlice';
+import { burgerOrderReducer } from './slices/burgerOrderSlice';
+import { burgerFeedReducer } from './slices/burgerFeedSlice';
+import { burgerOrdersReducer } from './slices/burgerArchiveSlice';
 
 export const rootReducer = combineReducers({
-  ingredients: ingredientsReducer,
-  user: userReducer,
-  burgerConstructor: constructorReducer,
-  order: orderReducer,
-  feed: feedReducer,
-  orders: ordersReducer
+  burgerIngredients: burgerIngredientsReducer,
+  burgerUser: burgerUserReducer,
+  burgerConstructor: burgerConstructorReducer,
+  burgerOrder: burgerOrderReducer,
+  burgerFeed: burgerFeedReducer,
+  burgerOrders: burgerOrdersReducer
 });

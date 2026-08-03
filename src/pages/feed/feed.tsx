@@ -2,18 +2,24 @@ import { Preloader } from '@ui';
 import { FeedUI } from '@ui-pages';
 import { FC, useEffect } from 'react';
 import { useDispatch, useSelector } from '../../services/store';
-import { getFeeds } from '../../services/slices/feedSlice';
+import { fetchBurgerFeeds } from '../../services/slices/burgerFeedSlice';
 
 export const Feed: FC = () => {
   const dispatch = useDispatch();
-  const orders = useSelector((state) => state.feed.orders);
+  const { orders, isLoading } = useSelector((state) => state.burgerFeed);
 
   useEffect(() => {
-    dispatch(getFeeds());
+    dispatch(fetchBurgerFeeds());
   }, [dispatch]);
 
-  if (!orders.length) {
+  if (isLoading || !orders.length) {
     return <Preloader />;
   }
-  return <FeedUI orders={orders} handleGetFeeds={() => dispatch(getFeeds())} />;
+
+  return (
+    <FeedUI
+      orders={orders}
+      handleGetFeeds={() => dispatch(fetchBurgerFeeds())}
+    />
+  );
 };

@@ -2,37 +2,39 @@ import { FC, SyntheticEvent, useState } from 'react';
 import { LoginUI } from '@ui-pages';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from '../../services/store';
-import { loginUser } from '../../services/slices/userSlice';
+import { loginBurgerUser } from '../../services/slices/burgerUserSlice';
 
 export const Login: FC = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [userEmail, setUserEmail] = useState('');
+  const [userPassword, setUserPassword] = useState('');
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
 
-  const error = useSelector((state) => state.user.loginUserError);
-  const isLoading = useSelector((state) => state.user.loginUserRequest);
+  const authError = useSelector((state) => state.burgerUser.authError);
+  const isAuthLoading = useSelector((state) => state.burgerUser.isAuthLoading);
 
-  const handleSubmit = (e: SyntheticEvent) => {
+  const handleLoginSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
-    dispatch(loginUser({ email, password }))
+    dispatch(loginBurgerUser({ email: userEmail, password: userPassword }))
       .unwrap()
       .then(() => {
         const from = location.state?.from?.pathname || '/';
         navigate(from, { replace: true });
       })
-      .catch(() => {});
+      .catch((err) => {
+        console.log('Ошибка входа:', err);
+      });
   };
 
   return (
     <LoginUI
-      errorText=''
-      email={email}
-      setEmail={setEmail}
-      password={password}
-      setPassword={setPassword}
-      handleSubmit={handleSubmit}
+      errorText={authError || ''}
+      email={userEmail}
+      setEmail={setUserEmail}
+      password={userPassword}
+      setPassword={setUserPassword}
+      handleSubmit={handleLoginSubmit}
     />
   );
 };
